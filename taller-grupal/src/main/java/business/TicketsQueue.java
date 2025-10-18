@@ -8,15 +8,71 @@ package business;
 import domain.Ticket;
 import theNODE.Node;
 
+
+
 /**
  *
- * @author MikelMZ : Miguel Armas
+ * @author
  */
 public class TicketsQueue {
+
+    Node<Ticket> queue;
+
     private Node<Ticket> head;
     private Node<Ticket> tail;
     private int length;
-    
-//TODO
+
+    // Agregar un elemento al final
+    public void enqueue(Ticket node) {
+        Node<Ticket> newnode = new Node<>(node);
+        if (isEmpty()) {
+            head = tail = newnode;
+        } else {
+            tail.setSiguiente(newnode);
+            tail = newnode;
+        }
+        length++;
+    }
+
+    // Eliminar y devolver el elemento del frente
+    public String dequeue(Ticket node) {
+        Node<Ticket> newnode = new Node<>(node);
+        if (isEmpty()) {
+            return null;
+        }
+        Ticket aux = head.getDato();
+        head=head.getSiguiente();
+        if (head == null) {
+            tail = null; // cola vacía, -> ambos null
+        }
+        length--;
+        return aux.toString();
+    }
+
+    public boolean isEmpty() {
+        return length == 0;
+    }
+
+    // Ver el elemento del frente sin eliminarlo
+    public String peek() {
+        return isEmpty() ? null : head.getDato().toString();
+    }
+
+    public int size() {
+        return length;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        Node<Ticket> actual = head;
+        while (actual != null) {
+            sb.append(actual.toString().toString());
+            if (actual.getSiguiente().toString() != null) sb.append(" <- ");
+            actual = actual.getSiguiente();
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 
 }
