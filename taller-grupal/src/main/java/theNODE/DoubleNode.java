@@ -19,12 +19,14 @@ public class DoubleNode<T> {
     private T dato; 
     
     // Atributo privado para la referencia al siguiente nodo
-    private DoubleNode<T> siguiente; 
+    private DoubleNode<T> prev; 
+    private DoubleNode<T> next; 
 
     // Constructor
     public DoubleNode(T dato) {
         this.dato = dato;
-        this.siguiente = null; // Inicialmente no apunta a nada
+        this.next = null; 
+        this.prev=null;
     }
 
     // --- Getters y Setters ---
@@ -39,13 +41,20 @@ public class DoubleNode<T> {
         this.dato = dato;
     }
 
-    // Permite acceder a la referencia del siguiente nodo
-    public DoubleNode<T> getSiguiente() {
-        return siguiente;
+    public DoubleNode<T> getPrev() {
+        return prev;
     }
 
-    // Permite enlazar el nodo a otro (crucial para SLL)
-    public void setSiguiente(DoubleNode<T> siguiente) {
-        this.siguiente = siguiente;
+    public void setPrev(DoubleNode<T> prev) {
+        this.prev = prev;
     }
+
+    public DoubleNode<T> getNext() {
+        return next;
+    }
+
+    public void setNext(DoubleNode<T> next) {
+        this.next = next;
+    }
+    
 }
