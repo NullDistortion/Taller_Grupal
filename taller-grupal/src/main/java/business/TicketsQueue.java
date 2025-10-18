@@ -35,8 +35,7 @@ public class TicketsQueue {
     }
 
     // Eliminar y devolver el elemento del frente
-    public String dequeue(Ticket node) {
-        Node<Ticket> newnode = new Node<>(node);
+    public Ticket dequeue() {
         if (isEmpty()) {
             return null;
         }
@@ -46,7 +45,7 @@ public class TicketsQueue {
             tail = null; // cola vacía, -> ambos null
         }
         length--;
-        return aux.toString();
+        return aux;
     }
 
     public boolean isEmpty() {
