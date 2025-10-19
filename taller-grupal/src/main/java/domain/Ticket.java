@@ -7,7 +7,12 @@ public class Ticket {
     private Person person;
     private Type type;
     private Status status;
-    
+
+    public Ticket(Person person, Type type, Status status) {
+        this.person = person;
+        this.type = type;
+        this.status = status;
+    }
 
     public Person getPerson() {
         return person;

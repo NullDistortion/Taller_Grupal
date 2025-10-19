@@ -1,79 +1,45 @@
 package domain;
 
-import enums.Status;
-import enums.Type;
+import java.time.LocalDate;
+import theNODE.Node;
 
 public class Person {
     private String name;
-    private String lastname;
+    private String lastName;
     private String identityCard;
     private String telephone;
 
-    private Status status;
-    private Type type;
+    private Node<Comments> comment;
 
-    public Person(String name, String lastname, String identityCard, String telephone, Status status, Type type) {
+    public Person(String name, String lastName, String identityCard, String telephone) {
         this.name = name;
-        this.lastname = lastname;
+        this.lastName = lastName;
         this.identityCard = identityCard;
         this.telephone = telephone;
-        this.status = status;
-        this.type = type;
+        this.comment = null;
     }
 
-    public String getName() {
-        return name;
+    // --- Getters y Setters ---
+    public String getName() { return name; }
+    public String getLastName() { return lastName; }
+    public String getIdentityCard() { return identityCard; }
+    public String getTelephone() { return telephone; }
+
+    public Node<Comments> getComment() { return comment; }
+
+    public void addComment(String description) {
+        Comments newComment = new Comments(description, LocalDate.now());
+        Node<Comments> newNode = new Node<>(newComment);
+
+        if (comment == null) {
+            comment = newNode;
+        } else {
+            Node<Comments> current = comment;
+            while (current.getSiguiente() != null) {
+                current = current.getSiguiente();
+            }
+            current.setSiguiente(newNode);
+        }
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getIdentityCard() {
-        return identityCard;
-    }
-
-    public void setIdentityCard(String identityCard) {
-        this.identityCard = identityCard;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "Nombre: %s %s%nCédula: %s%nTeléfono: %s%nEstado: %s%nTipo: %s%n",
-                name, lastname, identityCard, telephone, status, type
-        );
-    }
 }
