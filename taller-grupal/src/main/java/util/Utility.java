@@ -1,19 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package util;
 
 import domain.Person;
 import domain.Ticket;
 import enums.Status;
 import enums.Type;
+
 import java.util.Random;
 
-/**
- *
- * @author MikelMZ : Miguel Armas
- */
 public class Utility {
 
     public static String[] nombres = {"Juan", "Miguel", "Manuel", "Andres", "Ximena", "Ana", "Cristina", "Rosa"};

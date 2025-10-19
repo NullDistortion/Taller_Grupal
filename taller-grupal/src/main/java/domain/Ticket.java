@@ -37,6 +37,4 @@ public class Ticket {
     public void setStatus(Status status) {
         this.status = status;
     }
-    
-    
 }

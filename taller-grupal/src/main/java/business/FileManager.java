@@ -3,8 +3,6 @@ package business;
 import domain.Comments;
 import domain.Person;
 import domain.Ticket;
-import enums.Status;
-import enums.Type;
 import theNODE.Node;
 
 import java.io.BufferedWriter;
@@ -15,13 +13,13 @@ import java.io.IOException;
 //Clase para creacion del historial en archivos .txt
 public class FileManager {
 
-    private static int id = 1;
+    private int id = 1;
     File path = new File("src/main/java/history");
     File history = new File(path, "history.txt");
 
     public void create_history(Ticket ticket) {
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(history, true))){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(history))){
             Person person = ticket.getPerson();
 
             bw.write(id + ". {");
@@ -45,13 +43,13 @@ public class FileManager {
             int id_coment = 1;
 
             while (current_person != null) {
-                Comments c = current_person.getDato();
+                Comments c = current_person.getData();
 
                 bw.write("     " + id_coment + ") [" + c.getDate() + "] "
                         + "  " + c.getDescription());
                 bw.newLine();
 
-                current_person = current_person.getSiguiente();
+                current_person = current_person.getNext();
                 id_coment++;
             }
 
@@ -65,19 +63,6 @@ public class FileManager {
         } catch (IOException e) {
             System.out.println("Error al generar historial: " + e.getMessage());
         }
-    }
-
-    //prueba
-    public static void main(String[] args) {
-        Person p = new Person("Miguel", "Armas", "123434521253", "666");
-        p.addComment("dando ticket");
-        p.addComment("finalizado");
-
-        Ticket t = new Ticket(p, Type.CONTANCIA_CERTIFICADOS, Status.COMPLETADO);
-
-        FileManager fm = new FileManager();
-        fm.create_history(t);
-
     }
 
 }

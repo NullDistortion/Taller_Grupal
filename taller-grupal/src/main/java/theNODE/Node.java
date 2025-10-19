@@ -1,51 +1,40 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package theNODE;
 
 /**
- *
- * @author MikelMZ : Miguel Armas
- */
-/**
  * Clase Nodo genérico para estructuras de datos (SLL, Pila, Cola).
- * Permite almacenar cualquier tipo de dato T.
+ * Permite almacenar cualquier tipo de data T.
  */
 public class Node<T> {
-    
-    // Atributo privado para el dato que almacenará el nodo
-    private T dato; 
-    
-    // Atributo privado para la referencia al siguiente nodo
-    private Node<T> siguiente; 
+
+    // Atributo privado para el data que almacenará el nodo
+    private T data;
+
+    // Atributo privado para la referencia al next nodo
+    private Node<T> next;
 
     // Constructor
-    public Node(T dato) {
-        this.dato = dato;
-        this.siguiente = null; // Inicialmente no apunta a nada
+    public Node(T data) {
+        this.data = data;
+        this.next = null; // Inicialmente no apunta a nada
     }
 
-    // --- Getters y Setters ---
-
-    // Permite acceder al dato almacenado
-    public T getDato() {
-        return dato;
+    // Permite acceder al data almacenado
+    public T getData() {
+        return data;
     }
 
-    // Permite cambiar el dato almacenado (opcional, dependiendo de la inmutabilidad)
-    public void setDato(T dato) {
-        this.dato = dato;
+    // Permite cambiar el data almacenado (opcional, dependiendo de la inmutabilidad)
+    public void setData(T data) {
+        this.data = data;
     }
 
-    // Permite acceder a la referencia del siguiente nodo
-    public Node<T> getSiguiente() {
-        return siguiente;
+    // Permite acceder a la referencia del next nodo
+    public Node<T> getNext() {
+        return next;
     }
 
     // Permite enlazar el nodo a otro (crucial para SLL)
-    public void setSiguiente(Node<T> siguiente) {
-        this.siguiente = siguiente;
+    public void setNext(Node<T> next) {
+        this.next = next;
     }
 }

@@ -33,7 +33,7 @@ public class Main {
         System.out.println("Ha salido del sistema");
         sc.close();
 
-       
+
     }
 
     public static void printMenu() {
@@ -50,50 +50,51 @@ public class Main {
 
     }
 
-    public static void ejecutionOption(int option,Scanner sc){
+    public static void ejecutionOption(int option, Scanner sc) {
 
-    switch (option) {
-        case 1:
-            System.out.println("Hacer registro de ticket");
-            System.out.println("Ingrese su nombre");
-            String name = sc.nextLine();
+        switch (option) {
+            case 1:
+                System.out.println("Hacer registro de ticket");
+                System.out.println("Ingrese su nombre");
+                String name = sc.nextLine();
 
-            System.out.println("Ingrese su apellido");
-            String lastname = sc.nextLine();
+                System.out.println("Ingrese su apellido");
+                String lastname = sc.nextLine();
 
-            System.out.println("Ingrese el numero de su carnet identificativo");
-            String identityCard = sc.nextLine();
+                System.out.println("Ingrese el numero de su carnet identificativo");
+                String identityCard = sc.nextLine();
 
-            System.out.println("Ingrese su numero telefonico");
-            String telephone = sc.nextLine();
+                System.out.println("Ingrese su numero telefonico");
+                String telephone = sc.nextLine();
 
-            System.out.println("Tiket ingreasdo de manera correcta");
+                System.out.println("Tiket ingreasdo de manera correcta");
 
-            break;
-        case 2:
-            System.out.println("Consultar ticket");
-            
-            break;
+                break;
+            case 2:
+                System.out.println("Consultar ticket");
 
-        case 3:
-            System.out.println("Editar ticket");
-            System.out.println("Ingrese la nueva descripcion");
+                break;
 
-            //TODO
-            String description = sc.nextLine();
+            case 3:
+                System.out.println("Editar ticket");
+                System.out.println("Ingrese la nueva descripcion");
 
-            break;
-        case 4:
-            System.out.println("Cambiar estado de ticket");
-            System.out.println("Ingrese el nuevo estado");
+                //TODO
+                String description = sc.nextLine();
+
+                break;
+            case 4:
+                System.out.println("Cambiar estado de ticket");
+                System.out.println("Ingrese el nuevo estado");
 
 
-            break;
-        case 5:
-            System.out.println("Salir del programa");
+                break;
+            case 5:
+                System.out.println("Salir del programa");
 
-            break;
+                break;
+
+        }
 
     }
-
 }

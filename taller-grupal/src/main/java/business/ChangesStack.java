@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package business;
 
 import domain.Ticket;
 import theNODE.DoubleNode;
 
-/**
- *
- * @author MikelMZ : Miguel Armas
- */
 public class ChangesStack {
 
     private DoubleNode<Ticket> undo;
@@ -63,11 +55,11 @@ public class ChangesStack {
         }
 
         this.currentSize--;
-        return auxNode.getDato();
+        return auxNode.getData();
     }
-    
+
     //Inserta un elemento arriba de la pila REDO para los cambios que se rehacen
-     public void pushRedo(Ticket value) {
+    public void pushRedo(Ticket value) {
         DoubleNode newNode = new DoubleNode(value);
 
         if (this.redo == null) {
@@ -81,7 +73,7 @@ public class ChangesStack {
         }
     }
 
-     public Ticket popRedo() {
+    public Ticket popRedo() {
         if (isEmptyUndo()) {
             return null;
         }
@@ -93,7 +85,7 @@ public class ChangesStack {
             this.redo.setPrev(null);
         }
 
-        return auxNode.getDato();
+        return auxNode.getData();
     }
 
     public void removeTail() {
@@ -115,18 +107,19 @@ public class ChangesStack {
 
         this.currentSize--;
     }
-   
-    public void clearRedo(){
-        this.redo=null;
+
+    public void clearRedo() {
+        this.redo = null;
     }
 
     public boolean isEmptyUndo() {
         return this.undo == null;
     }
+
     public boolean isEmptyRedo() {
         return this.redo == null;
     }
-    
+
     public int size() {
         return currentSize;
     }

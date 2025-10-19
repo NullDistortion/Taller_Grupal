@@ -1,7 +1,8 @@
 package domain;
 
-import java.time.LocalDate;
 import theNODE.Node;
+
+import java.time.LocalDate;
 
 public class Person {
     private String name;
@@ -19,13 +20,25 @@ public class Person {
         this.comment = null;
     }
 
-    // --- Getters y Setters ---
-    public String getName() { return name; }
-    public String getLastName() { return lastName; }
-    public String getIdentityCard() { return identityCard; }
-    public String getTelephone() { return telephone; }
+    public String getName() {
+        return name;
+    }
 
-    public Node<Comments> getComment() { return comment; }
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getIdentityCard() {
+        return identityCard;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public Node<Comments> getComment() {
+        return comment;
+    }
 
     public void addComment(String description) {
         Comments newComment = new Comments(description, LocalDate.now());
@@ -35,10 +48,10 @@ public class Person {
             comment = newNode;
         } else {
             Node<Comments> current = comment;
-            while (current.getSiguiente() != null) {
-                current = current.getSiguiente();
+            while (current.getNext() != null) {
+                current = current.getNext();
             }
-            current.setSiguiente(newNode);
+            current.setNext(newNode);
         }
     }
 

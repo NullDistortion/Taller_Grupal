@@ -28,7 +28,7 @@ public class TicketsQueue {
         if (isEmpty()) {
             head = tail = newnode;
         } else {
-            tail.setSiguiente(newnode);
+            tail.setNext(newnode);
             tail = newnode;
         }
         length++;
@@ -39,8 +39,8 @@ public class TicketsQueue {
         if (isEmpty()) {
             return null;
         }
-        Ticket aux = head.getDato();
-        head=head.getSiguiente();
+        Ticket aux = head.getData();
+        head=head.getNext();
         if (head == null) {
             tail = null; // cola vacía, -> ambos null
         }
@@ -54,7 +54,7 @@ public class TicketsQueue {
 
     // Ver el elemento del frente sin eliminarlo
     public String peek() {
-        return isEmpty() ? null : head.getDato().toString();
+        return isEmpty() ? null : head.getData().toString();
     }
 
     public int size() {
@@ -67,8 +67,8 @@ public class TicketsQueue {
         Node<Ticket> actual = head;
         while (actual != null) {
             sb.append(actual.toString());
-            if (actual.getSiguiente().toString() != null) sb.append(" <- ");
-            actual = actual.getSiguiente();
+            if (actual.getNext().toString() != null) sb.append(" <- ");
+            actual = actual.getNext();
         }
         sb.append("]");
         return sb.toString();
