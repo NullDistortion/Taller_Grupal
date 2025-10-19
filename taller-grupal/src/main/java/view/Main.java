@@ -1,10 +1,16 @@
 package view;
 
+import java.util.Scanner;
+
 public class Main {
+    public String name;
+
     public static void main(String[] args) {
 
         System.out.println("Bienveido al sistema");
         Scanner sc = new Scanner(System.in);
+        System.out.println("Ingrese su nombre");
+        String name = sc.nextLine();
         int option;
 
 
@@ -27,12 +33,10 @@ public class Main {
         System.out.println("Ha salido del sistema");
         sc.close();
 
-        } while (option != 0);
-
-        scanner.close();
+       
     }
 
-    public static void printMenu(int option, Scanner sc) {
+    public static void printMenu() {
         System.out.println("===================================");
         System.out.println("Escoga la accion que desee realizar");
         System.out.println("===================================");
@@ -46,7 +50,7 @@ public class Main {
 
     }
 
-    public static void ejecutionOption(int option){
+    public static void ejecutionOption(int option,Scanner sc){
 
     switch (option) {
         case 1:
@@ -68,8 +72,7 @@ public class Main {
             break;
         case 2:
             System.out.println("Consultar ticket");
-            System.out.println("Ingrese su nombre");
-            String name = sc.nextLine();
+            
             break;
 
         case 3:
