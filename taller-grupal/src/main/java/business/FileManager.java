@@ -67,23 +67,6 @@ public class FileManager {
         }
     }
 
-    private void add_coment(Person person) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new FileWriter(history));
-        Node<Comments> current_person = person.getComment();
-        int id_coment = 1;
-
-        while (current_person != null) {
-            Comments c = current_person.getDato();
-
-            bw.write("     " + id_coment + ") [" + c.getDate() + "] "
-                    + "  " + c.getDescription());
-            bw.newLine();
-
-            current_person = current_person.getSiguiente();
-            id_coment++;
-        }
-    }
-
     //prueba
     public static void main(String[] args) {
         Person p = new Person("Miguel", "Armas", "123434521253", "666");
