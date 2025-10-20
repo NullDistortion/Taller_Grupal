@@ -1,6 +1,7 @@
 package business;
 
 import domain.Ticket;
+import enums.Status;
 
 public class Business {
     private TicketsQueue queue;
@@ -14,6 +15,7 @@ public class Business {
         Ticket actualTicket= queue.dequeue();
         changesHistorial=null;
         registerChange(actualTicket);
+        actualTicket.setStatus(Status.EN_ATENCION);
         return actualTicket;
     }
     
