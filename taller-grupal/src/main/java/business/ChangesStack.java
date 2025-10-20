@@ -2,12 +2,13 @@ package business;
 
 import domain.Ticket;
 import theNODE.DoubleNode;
+import theNODE.Node;
 
 public class ChangesStack {
 
     private DoubleNode<Ticket> undo;
     private DoubleNode<Ticket> tail;
-    private DoubleNode<Ticket> redo;
+    private Node<Ticket> redo;
     private final int MAX_LIMIT = 6;
     private int currentSize;
 
@@ -60,30 +61,25 @@ public class ChangesStack {
 
     //Inserta un elemento arriba de la pila REDO para los cambios que se rehacen
     public void pushRedo(Ticket value) {
-        DoubleNode newNode = new DoubleNode(value);
+        Node newNode = new Node(value);
 
         if (this.redo == null) {
-            this.undo = newNode;
+            this.redo = newNode;
         } else {
 
             newNode.setNext(this.redo);
-            this.redo.setPrev(newNode);
             this.redo = newNode;
 
         }
     }
 
     public Ticket popRedo() {
-        if (isEmptyUndo()) {
+        if (isEmptyRedo()) {
             return null;
         }
 
-        DoubleNode<Ticket> auxNode = this.redo;
+        Node<Ticket> auxNode = this.redo;
         this.redo = auxNode.getNext();
-
-        if (this.redo != null) {
-            this.redo.setPrev(null);
-        }
 
         return auxNode.getData();
     }
