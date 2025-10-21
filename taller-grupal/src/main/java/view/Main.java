@@ -151,6 +151,7 @@ public class Main {
 
                     bs.addToQueue(newTicket);
                     System.out.println("Ticket ingresado de manera correcta");
+                    t = newTicket;
                     break;
 
                 case "4": // Imprimir historial

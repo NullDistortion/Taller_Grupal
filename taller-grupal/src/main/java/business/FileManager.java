@@ -19,7 +19,7 @@ public class FileManager {
 
     public void create_history(Ticket ticket) {
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(history))){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(history, true))){
             Person person = ticket.getPerson();
 
             bw.write(id + ". {");
