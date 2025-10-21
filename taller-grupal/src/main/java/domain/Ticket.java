@@ -37,4 +37,11 @@ public class Ticket {
     public void setStatus(Status status) {
         this.status = status;
     }
+    @Override
+    public String toString() {
+        // Ejemplo: "[Persona: Juan Pérez (11223344) | Tipo: MATRICULA | Estado: EN_ATENCION]"
+        return "[Persona: " + person.toString() + 
+               " | Tipo: " + type + 
+               " | Estado: " + status + "]";
+    }
 }

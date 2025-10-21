@@ -55,4 +55,9 @@ public class Person {
         }
     }
 
+    @Override
+    public String toString() {
+        // Ejemplo: "Juan Pérez (11223344)"
+        return name + " " + lastName + " (" + identityCard + ")";
+    }
 }

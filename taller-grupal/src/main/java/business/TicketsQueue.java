@@ -55,10 +55,9 @@ public class TicketsQueue {
         StringBuilder sb = new StringBuilder("[");
         Node<Ticket> actual = head; 
         while (actual != null) {
-            sb.append(actual.toString());
             
-            // --- CORRECCIÓN AQUÍ ---
-            // Simplemente comprueba si hay un siguiente nodo
+            sb.append(actual.getData().toString()); 
+            
             if (actual.getNext() != null) {
                 sb.append(" <- ");
             }
@@ -68,5 +67,4 @@ public class TicketsQueue {
         sb.append("]");
         return sb.toString();
     }
-
 }
