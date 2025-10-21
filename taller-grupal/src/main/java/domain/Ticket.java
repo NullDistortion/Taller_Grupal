@@ -13,6 +13,14 @@ public class Ticket {
         this.type = type;
         this.status = status;
     }
+    public Ticket(Ticket other) {
+    // Llama al constructor de copia de Person
+    this.person = new Person(other.person); 
+    
+    // Los Enums son inmutables, se pueden copiar directamente
+    this.type = other.type;     
+    this.status = other.status; 
+}
 
     public Person getPerson() {
         return person;

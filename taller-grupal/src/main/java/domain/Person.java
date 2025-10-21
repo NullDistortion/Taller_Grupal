@@ -13,6 +13,42 @@ public class Person {
 
     private Node<Comments> comment;
 
+    public Person(Person other) {
+        // Copia los valores primitivos/inmutables
+        this.name = other.name;
+        this.lastName = other.lastName;
+        this.identityCard = other.identityCard;
+        this.telephone = other.telephone;
+
+        // Deep copy de la lista enlazada 'comment'
+        this.comment = null;
+        if (other.comment != null) {
+            Node<Comments> currentOther = other.comment;
+            Node<Comments> tailThis = null;
+
+            while (currentOther != null) {
+                // Clona el objeto Comments
+                Comments clonedComment = new Comments(
+                        currentOther.getData().getDescription(),
+                        currentOther.getData().getDate()
+                );
+
+                Node<Comments> newNode = new Node<>(clonedComment);
+
+                if (this.comment == null) {
+                    // Es el primer nodo (head)
+                    this.comment = newNode;
+                    tailThis = newNode;
+                } else {
+                    // Añade al final
+                    tailThis.setNext(newNode);
+                    tailThis = newNode;
+                }
+                currentOther = currentOther.getNext();
+            }
+        }
+    }
+
     public Person(String name, String lastName, String identityCard, String telephone) {
         this.name = name;
         this.lastName = lastName;
@@ -116,7 +152,29 @@ public class Person {
 
     @Override
     public String toString() {
-        // Ejemplo: "Juan Pérez (11223344)"
-        return name + " " + lastName + " (" + identityCard + ")";
+        // 1. Construye la información base de la persona
+        StringBuilder sb = new StringBuilder();
+        sb.append(name).append(" ").append(lastName);
+        sb.append(" (").append(identityCard).append(")");
+
+        // 2. Recorre la lista de comentarios y la añade
+        if (comment == null) {
+            sb.append(" [Sin Comentarios]");
+        } else {
+            sb.append(" [Comentarios: ");
+            Node<Comments> current = comment;
+            while (current != null) {
+                // Usa el .toString() de la clase Comments
+                sb.append(current.getData().toString()); 
+                
+                if (current.getNext() != null) {
+                    sb.append(" | "); // Un separador
+                }
+                current = current.getNext();
+            }
+            sb.append("]"); // Cierre de la lista de comentarios
+        }
+
+        return sb.toString();
     }
 }

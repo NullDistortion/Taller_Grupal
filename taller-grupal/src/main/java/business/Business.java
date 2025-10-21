@@ -23,22 +23,22 @@ public class Business {
             return null;
         }
         changesHistorial=new ChangesStack();
-        registerChange(actualTicket);
+        registerChange(new Ticket(actualTicket));
         actualTicket.setStatus(Status.EN_ATENCION);
         return actualTicket;
     }
 
     public void registerChange(Ticket ticket){
-        changesHistorial.pushUndo(ticket);
+        changesHistorial.pushUndo(new Ticket(ticket));
     }
 
     public Ticket undoChanges(Ticket actualTicket){
-        changesHistorial.pushRedo(actualTicket);
+        changesHistorial.pushRedo(new Ticket(actualTicket));
         return changesHistorial.popUndo();
     }
 
     public Ticket redoChanges(Ticket actualTicket){
-        changesHistorial.pushUndo(actualTicket);
+        changesHistorial.pushUndo(new Ticket(actualTicket));
         return changesHistorial.popRedo();
     }
 

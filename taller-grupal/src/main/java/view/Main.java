@@ -8,9 +8,11 @@ import enums.Status;
 import enums.Type;
 
 import java.util.Scanner;
+import util.Utility;
 
 public class Main {
 
+    @SuppressWarnings("empty-statement")
     public static void main(String[] args) {
         boolean flag = true;
         Scanner sc = new Scanner(System.in);
@@ -25,6 +27,32 @@ public class Main {
         do {
             printMenu();
             switch (sc.nextLine()) {
+                case "0": 
+                    System.out.println("Cuantos tickets desea generar");
+                    int n = 0;
+                    boolean flagInt = true;
+                    do {
+                        try {
+                            System.out.print("Por favor, ingresa un número entero: ");
+                            n = sc.nextInt();
+                            flagInt = false;
+
+                        } catch (java.util.InputMismatchException e) {
+
+                            System.out.println("Error: Eso no es un número entero. Inténtalo de nuevo.");
+                            sc.nextLine();
+
+                        }
+                    } while (flagInt);
+
+                    sc.nextLine();
+
+                    for (int i = 0; i < n; i++) {
+                        bs.addToQueue(Utility.generateTicket());
+                        System.out.println("Ticket ingresado de manera correcta");
+                    }
+
+                    break;
 
                 case "1": // Atender ticket
                     t = bs.processTicked();
@@ -37,38 +65,54 @@ public class Main {
                     do {
                         printMenuTickets();
                         switch (sc.nextLine()) {
+                            case "0":
+                                System.out.println("Ticket Actual");
 
-                            case "1": // Agregar comentario
+                                if (t != null) {
+                                    System.out.println(t.toString());
+                                } else {
+                                    System.out.println("No hay ticket activo (posiblemente revertido a nulo).");
+                                }
+
+                                break;
+                            case "1":
                                 System.out.println("Anadiendo comentario");
                                 System.out.println("Ingrese su comentario:");
                                 String comment = sc.nextLine();
-                                t.getPerson().addComment(comment);
+
                                 bs.registerChange(t);
+                                t.getPerson().addComment(comment);
+
                                 break;
 
-                            case "2": // Cambiar estado
+                            case "2":
                                 System.out.println("Cambiando estado del ticket");
                                 printMenuStatus();
                                 switch (sc.nextLine()) {
                                     case "1":
-                                        t.setStatus(Status.EN_COLA);
+
                                         bs.registerChange(t);
+                                        t.setStatus(Status.EN_COLA);
                                         break;
                                     case "2":
-                                        t.setStatus(Status.EN_ATENCION);
+
                                         bs.registerChange(t);
+                                        t.setStatus(Status.EN_ATENCION);
                                         break;
                                     case "3":
-                                        t.setStatus(Status.EN_PROCESO);
+
                                         bs.registerChange(t);
+                                        t.setStatus(Status.EN_PROCESO);
                                         break;
                                     case "4":
-                                        t.setStatus(Status.PENDIENTE_DOCS);
+
                                         bs.registerChange(t);
+                                        t.setStatus(Status.PENDIENTE_DOCS);
                                         break;
                                     case "5":
-                                        t.setStatus(Status.COMPLETADO);
+
                                         bs.registerChange(t);
+                                        t.setStatus(Status.COMPLETADO);
                                         break;
                                     case "6":
                                         System.out.println("Regresando al menu anterior");
@@ -78,25 +122,39 @@ public class Main {
                                 }
                                 break;
 
-                            case "3": // Revertir cambios
+                            case "3": 
                                 if (t != null) {
-                                    t = bs.undoChanges(t);
-                                    System.out.println("Cambio revertido.");
+                                   
+                                    Ticket estadoAnterior = bs.undoChanges(t);
+
+                                    if (estadoAnterior != null) {
+                                        t = estadoAnterior; 
+                                        System.out.println("Cambio revertido.");
+                                    } else {
+                                        System.out.println("No hay más cambios que revertir.");
+                                    }
                                 } else {
-                                    System.out.println("No hay ticket activo.");
+                                    System.out.println("No hay CAMBIOS POR EFECTUAR.");
                                 }
                                 break;
 
                             case "4": // Rehacer cambios
                                 if (t != null) {
-                                    t = bs.redoChanges(t);
-                                    System.out.println("Cambio rehecho.");
+
+                                    Ticket estadoSiguiente = bs.redoChanges(t);
+
+                                    if (estadoSiguiente != null) {
+                                        t = estadoSiguiente;
+                                        System.out.println("Cambio rehecho.");
+                                    } else {
+                                        System.out.println("No hay más cambios que rehacer.");
+                                    }
                                 } else {
                                     System.out.println("No hay ticket activo.");
                                 }
                                 break;
 
-                            case "5": // Volver al menu principal
+                            case "5":
                                 secondFlagTicket = false;
                                 break;
 
@@ -106,12 +164,12 @@ public class Main {
                     } while (secondFlagTicket);
                     break;
 
-                case "2": // Tickets disponibles
+                case "2":
                     System.out.println("Consultando tickets disponibles");
                     bs.printTickets();
                     break;
 
-                case "3": // Generar ticket
+                case "3":
                     System.out.println("Hacer registro de ticket");
 
                     System.out.println("Ingrese su nombre");
@@ -154,7 +212,7 @@ public class Main {
                     t = newTicket;
                     break;
 
-                case "4": // Imprimir historial
+                case "4":
                     if (t != null) {
                         fm.create_history(t);
                     } else {
@@ -162,7 +220,7 @@ public class Main {
                     }
                     break;
 
-                case "5": // Salir del programa
+                case "5":
                     System.out.println("Salir del programa");
                     flag = false;
                     break;
@@ -180,6 +238,7 @@ public class Main {
     public static void printMenu() {
         System.out.println("Escoga la accion que desee realizar");
         System.out.println("===================================");
+        System.out.println("0. Llenar tickets");
         System.out.println("1. Atender ticket");
         System.out.println("2. Tickets disponibles");
         System.out.println("3. Generar ticket");
@@ -192,6 +251,7 @@ public class Main {
     public static void printMenuTickets() {
         System.out.println("Escoga la accion que desee realizar");
         System.out.println("===================================");
+        System.out.println("0. Mostrar Ticket");
         System.out.println("1. Agregar comentario");
         System.out.println("2. Cambiar estado");
         System.out.println("3. Revertir cambios");
