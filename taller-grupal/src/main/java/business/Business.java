@@ -4,8 +4,13 @@ import domain.Ticket;
 import enums.Status;
 
 public class Business {
-    private TicketsQueue queue;
+    private final TicketsQueue queue;
     private ChangesStack changesHistorial;
+    
+    public Business() {
+        this.queue = new TicketsQueue();
+        this.changesHistorial = new ChangesStack();
+    }
     
     public void addToQueue(Ticket ticket){
         queue.enqueue(ticket);
@@ -13,7 +18,10 @@ public class Business {
     
     public Ticket  processTicked(){
         Ticket actualTicket= queue.dequeue();
-        changesHistorial=null;
+        if (actualTicket == null) {
+            return null; 
+        }
+        changesHistorial=new ChangesStack();
         registerChange(actualTicket);
         actualTicket.setStatus(Status.EN_ATENCION);
         return actualTicket;
