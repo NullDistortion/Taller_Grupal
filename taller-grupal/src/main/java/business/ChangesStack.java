@@ -12,7 +12,6 @@ public class ChangesStack {
     private final int MAX_LIMIT = 6;
     private int currentSize;
 
-    //TODO
     public ChangesStack() {
         this.undo = null;
         this.redo = null;

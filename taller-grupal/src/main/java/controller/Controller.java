@@ -1,7 +1,5 @@
 package controller;
 
-import domain.Person;
-
 public class Controller {
     public void registerTicket(){
 

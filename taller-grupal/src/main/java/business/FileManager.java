@@ -11,7 +11,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 //Clase para creacion del historial en archivos .txt
-//wasads
 public class FileManager {
 
     private int id = 1;
