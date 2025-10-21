@@ -6,6 +6,7 @@ import enums.Status;
 public class Business {
     private final TicketsQueue queue;
     private ChangesStack changesHistorial;
+    
 
     public Business() {
         this.queue = new TicketsQueue();
@@ -43,6 +44,47 @@ public class Business {
 
     public void printTickets() {
         System.out.println(queue.toString());
+    }
+    
+    public void printCommentsOfCurrentTicket(Ticket ticket) {
+        if (ticket != null) {
+            // Llama al método de la persona de ese ticket
+            ticket.getPerson().printComments(); 
+        } else {
+            System.out.println("No hay ningún ticket en atención.");
+        }
+    }
+
+   
+     //Añade un comentario al ticket que está en atención.
+     
+    public void addCommentToCurrentTicket(String description,Ticket ticket) {
+        if (ticket != null) {
+            ticket.getPerson().addComment(description);
+            System.out.println("Comentario añadido.");
+        } else {
+            System.out.println("No hay ningún ticket en atención.");
+        }
+    }
+
+    
+     // Elimina un comentario del ticket que está en atención.
+     
+    public boolean deleteCommentFromCurrentTicket(String description,Ticket ticket) {
+        if (ticket != null) {
+            return ticket.getPerson().deleteComment(description);
+        }
+        return false;
+    }
+
+    
+     //Actualiza un comentario del ticket que está en atención.
+    
+    public boolean updateCommentOnCurrentTicket(String oldDesc, String newDesc,Ticket ticket) {
+        if (ticket != null) {
+            return ticket.getPerson().updateComment(oldDesc, newDesc);
+        }
+        return false;
     }
 
 }

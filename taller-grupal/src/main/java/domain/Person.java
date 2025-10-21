@@ -5,6 +5,7 @@ import theNODE.Node;
 import java.time.LocalDate;
 
 public class Person {
+
     private String name;
     private String lastName;
     private String identityCard;
@@ -53,6 +54,64 @@ public class Person {
             }
             current.setNext(newNode);
         }
+    }
+
+    public void printComments() {
+        if (comment == null) {
+            System.out.println("No hay comentarios para " + this.name);
+            return;
+        }
+
+        System.out.println("Comentarios para: " + this.toString());
+        Node<Comments> current = comment;
+        while (current != null) {
+
+            System.out.println("  -> " + current.getData().toString());
+            current = current.getNext();
+        }
+    }
+
+    public boolean deleteComment(String description) {
+        if (comment == null) {
+            return false;
+        }
+
+        if (comment.getData().getDescription().equals(description)) {
+            comment = comment.getNext();
+            return true;
+        }
+
+        Node<Comments> previous = comment;
+        Node<Comments> current = comment.getNext();
+
+        while (current != null) {
+            if (current.getData().getDescription().equals(description)) {
+
+                previous.setNext(current.getNext());
+                return true;
+            }
+
+            previous = current;
+            current = current.getNext();
+        }
+
+        return false; // No se encontró
+    }
+
+    public boolean updateComment(String oldDescription, String newDescription) {
+        if (newDescription == null || newDescription.isEmpty()) {
+            return false;
+        }
+
+        Node<Comments> current = comment;
+        while (current != null) {
+            if (current.getData().getDescription().equals(oldDescription)) {
+                current.getData().setDescription(newDescription);
+                return true;
+            }
+            current = current.getNext();
+        }
+        return false;
     }
 
     @Override
