@@ -53,10 +53,16 @@ public class TicketsQueue {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
-        Node<Ticket> actual = head;
+        Node<Ticket> actual = head; 
         while (actual != null) {
             sb.append(actual.toString());
-            if (actual.getNext().toString() != null) sb.append(" <- ");
+            
+            // --- CORRECCIÓN AQUÍ ---
+            // Simplemente comprueba si hay un siguiente nodo
+            if (actual.getNext() != null) {
+                sb.append(" <- ");
+            }
+            
             actual = actual.getNext();
         }
         sb.append("]");
