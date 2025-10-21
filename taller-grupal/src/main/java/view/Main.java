@@ -156,6 +156,13 @@ public class Main {
 
                             case "5":
                                 secondFlagTicket = false;
+                                if(t!=null){
+                                fm.logTicketState(t);
+                                
+                                }else{
+                                    System.out.println("No hay ticket para guardar");
+                                }
+                               
                                 break;
 
                             default:
@@ -213,11 +220,9 @@ public class Main {
                     break;
 
                 case "4":
-                    if (t != null) {
-                        fm.create_history(t);
-                    } else {
-                        System.out.println("No hay ticket activo para generar historial.");
-                    }
+                    
+                       System.out.println(fm.generateReport());
+                   
                     break;
 
                 case "5":
