@@ -1,6 +1,7 @@
 package business;
 
 import domain.Comments;
+import java.time.LocalDate;
 import theNODE.Node;
 
 public class CommentsList {
@@ -11,22 +12,100 @@ public class CommentsList {
         this.head = null;
     }
 
-    public CommentsList(Node<Comments> head) {
-        this.head = head;
+    //Constructor de Copia (Deep Copy).
+    public CommentsList(CommentsList other) {
+        this.head = null;
+        if (other.head != null) {
+            Node<Comments> currentOther = other.head;
+            Node<Comments> tailThis = null;
+
+            while (currentOther != null) {
+                Comments clonedComment = new Comments(
+                        currentOther.getData().getDescription(),
+                        currentOther.getData().getDate()
+                );
+                Node<Comments> newNode = new Node<>(clonedComment);
+
+                if (this.head == null) {
+                    this.head = newNode;
+                    tailThis = newNode;
+                } else {
+                    tailThis.setNext(newNode);
+                    tailThis = newNode;
+                }
+                currentOther = currentOther.getNext();
+            }
+        }
     }
 
+    public void add(String description) throws IllegalArgumentException {
+        // La validación del constructor de Comments lanza la excepción
+        Comments newComment = new Comments(description, LocalDate.now());
+        Node<Comments> newNode = new Node<>(newComment);
+
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node<Comments> current = head;
+            while (current.getNext() != null) {
+                current = current.getNext();
+            }
+            current.setNext(newNode);
+        }
+    }
+    
+    public boolean deleteByDescription(String description) {
+        if (head == null) {
+            return false;
+        }
+        if (head.getData().getDescription().equals(description)) {
+            head = head.getNext();
+            return true;
+        }
+        Node<Comments> previous = head;
+        Node<Comments> current = head.getNext();
+        while (current != null) {
+            if (current.getData().getDescription().equals(description)) {
+                previous.setNext(current.getNext());
+                return true;
+            }
+            previous = current;
+            current = current.getNext();
+        }
+        return false; // No se encontró
+    }
+    
+    public boolean updateByDescription(String oldDescription, String newDescription) {
+        if (newDescription == null || newDescription.trim().isEmpty()) {
+            // Validamos la nueva descripción aquí, aunque Comments también lo haga
+            return false;
+        }
+        Node<Comments> current = head;
+        while (current != null) {
+            if (current.getData().getDescription().equals(oldDescription)) {
+                current.getData().setDescription(newDescription.trim());
+                return true;
+            }
+            current = current.getNext();
+        }
+        return false;
+    }
+    
     public boolean isEmpty() {
         return this.head == null;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[");
+        if (isEmpty()) {
+            return "[Sin Comentarios]";
+        }
+        StringBuilder sb = new StringBuilder("[Comentarios: ");
         Node<Comments> current = head;
         while (current != null) {
-            sb.append(current.getData().toString()); 
+            sb.append(current.getData().toString());
             if (current.getNext() != null) {
-                sb.append(" -> ");
+                sb.append(" | ");
             }
             current = current.getNext();
         }

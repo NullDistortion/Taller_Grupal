@@ -27,7 +27,7 @@ public class Main {
         do {
             printMenu();
             switch (sc.nextLine()) {
-                case "0": 
+                case "0":
                     System.out.println("Cuantos tickets desea generar");
                     int n = 0;
                     boolean flagInt = true;
@@ -48,9 +48,9 @@ public class Main {
                     sc.nextLine();
 
                     for (int i = 0; i < n; i++) {
-                        bs.addToQueue(Utility.generateTicket());   
+                        bs.addToQueue(Utility.generateTicket());
                     }
-                    System.out.println("Se han ingresado x"+n+" tickets");
+                    System.out.println("Se han ingresado x" + n + " tickets");
 
                     break;
 
@@ -65,7 +65,7 @@ public class Main {
                     do {
                         printMenuTickets();
                         switch (sc.nextLine()) {
-                            case "0":
+                            case "0": //Mostrar ticket Actual
                                 System.out.println("Ticket Actual");
 
                                 if (t != null) {
@@ -75,16 +75,82 @@ public class Main {
                                 }
 
                                 break;
-                            case "1":
-                                System.out.println("Anadiendo comentario");
-                                System.out.println("Ingrese su comentario:");
-                                String comment = sc.nextLine();
+                            case "1": //Opciones de Comentarios
+                                printMenuComments();
+                                switch (sc.nextLine()) {
 
-                                bs.registerChange(t);
-                                t.getPerson().addComment(comment);
+                                    case "1": { // Añadir comentario
+                                        System.out.println("Anadiendo comentario");
+                                        System.out.println("Ingrese su comentario:");
+                                        String comment = sc.nextLine();
 
+                                        try {
+                                            bs.registerChange(t);
+                                            // 2. Ejecutar la acción (que ahora valida y puede fallar)
+                                            t.getPerson().addComment(comment);
+                                            System.out.println("Comentario añadido.");
+
+                                        } catch (IllegalArgumentException e) {
+                                            System.out.println("Error al añadir: " + e.getMessage());
+                                            bs.discardLastUndo();
+                                        }
+                                        break;
+                                    }
+
+                                    case "2": { // Modificar comentario
+                                        System.out.println("Modificando comentario");
+                                        System.out.println("Ingrese el texto EXACTO del comentario a modificar:");
+                                        String oldDesc = sc.nextLine();
+                                        System.out.println("Ingrese el NUEVO texto del comentario:");
+                                        String newDesc = sc.nextLine();
+
+                                        try {
+
+                                            bs.registerChange(t);
+
+                                            boolean updated = t.getPerson().updateComment(oldDesc, newDesc);
+
+                                            if (updated) {
+                                                System.out.println("Comentario actualizado.");
+                                            } else {
+                                                System.out.println("Error: No se encontró el comentario o la nueva descripción estaba vacía.");
+                                                bs.discardLastUndo();
+                                            }
+                                        } catch (IllegalArgumentException e) {
+                                            System.out.println("Error al modificar: " + e.getMessage());
+                                            bs.discardLastUndo();
+                                        }
+                                        break;
+                                    }
+
+                                    case "3": { // Eliminar comentario
+                                        System.out.println("Eliminando comentario");
+                                        System.out.println("Ingrese el texto EXACTO del comentario a eliminar:");
+                                        String delDesc = sc.nextLine();
+
+                                        bs.registerChange(t);
+
+                                        boolean deleted = t.getPerson().deleteComment(delDesc);
+
+                                        if (deleted) {
+                                            System.out.println("Comentario eliminado.");
+                                        } else {
+                                            System.out.println("Error: No se encontró el comentario.");
+                                            bs.discardLastUndo();
+                                        }
+                                        break;
+                                    }
+
+                                    case "4": { // Volver
+                                        System.out.println("Volviendo al menú anterior...");
+                                        break;
+                                    }
+
+                                    default:
+                                        System.out.println("Opción no válida.");
+                                        break;
+                                }
                                 break;
-
                             case "2":
                                 System.out.println("Cambiando estado del ticket");
                                 printMenuStatus();
@@ -122,13 +188,13 @@ public class Main {
                                 }
                                 break;
 
-                            case "3": 
+                            case "3":
                                 if (t != null) {
-                                   
+
                                     Ticket estadoAnterior = bs.undoChanges(t);
 
                                     if (estadoAnterior != null) {
-                                        t = estadoAnterior; 
+                                        t = estadoAnterior;
                                         System.out.println("Cambio revertido.");
                                     } else {
                                         System.out.println("No hay más cambios que revertir.");
@@ -156,13 +222,13 @@ public class Main {
 
                             case "5":
                                 secondFlagTicket = false;
-                                if(t!=null){
-                                fm.logTicketState(t);
-                                
-                                }else{
+                                if (t != null) {
+                                    fm.logTicketState(t);
+
+                                } else {
                                     System.out.println("No hay ticket para guardar");
                                 }
-                               
+
                                 break;
 
                             default:
@@ -220,9 +286,9 @@ public class Main {
                     break;
 
                 case "4":
-                    
-                       System.out.println(fm.generateReport());
-                   
+
+                    System.out.println(fm.generateReport());
+
                     break;
 
                 case "5":
@@ -257,7 +323,7 @@ public class Main {
         System.out.println("Escoga la accion que desee realizar");
         System.out.println("===================================");
         System.out.println("0. Mostrar Ticket");
-        System.out.println("1. Agregar comentario");
+        System.out.println("1. Opciones de Comentarios");
         System.out.println("2. Cambiar estado");
         System.out.println("3. Revertir cambios");
         System.out.println("4. Rehacer cambios");
@@ -275,6 +341,17 @@ public class Main {
         System.out.println("4. Cambiar estado a Documento Pendiente");
         System.out.println("5. Cambiar estado a Completado");
         System.out.println("6. Regresar");
+        System.out.println("==================================");
+        System.out.println("Ingrese una opcion: ");
+    }
+
+    public static void printMenuComments() {
+        System.out.println("Escoga la accion que desee realizar");
+        System.out.println("====================================");
+        System.out.println("1. Añadir Comentario");
+        System.out.println("2. Modificar Comentario");
+        System.out.println("3. Eliminar Comentario");
+        System.out.println("4. Regresar");
         System.out.println("==================================");
         System.out.println("Ingrese una opcion: ");
     }

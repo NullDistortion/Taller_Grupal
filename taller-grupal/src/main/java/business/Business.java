@@ -41,6 +41,9 @@ public class Business {
         changesHistorial.pushUndo(new Ticket(actualTicket));
         return changesHistorial.popRedo();
     }
+    public void discardLastUndo() {
+        changesHistorial.popUndo();
+    }
 
     public void printTickets() {
         System.out.println(queue.toString());
