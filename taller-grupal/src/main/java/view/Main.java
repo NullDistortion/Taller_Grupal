@@ -35,11 +35,15 @@ public class Main {
                         try {
                             System.out.print("Por favor, ingresa un número entero: ");
                             n = sc.nextInt();
-                            flagInt = false;
+                            if (n > 0) {
+                                flagInt = false;
+                            } else {
+                                System.out.println("Error: El número debe ser mayor que 0.");
+                            }
 
                         } catch (java.util.InputMismatchException e) {
 
-                            System.out.println("Error: Eso no es un número entero. Inténtalo de nuevo.");
+                            System.out.println("Error: Eso no es un número entero mayor a 0. Inténtalo de nuevo.");
                             sc.nextLine();
 
                         }
@@ -99,10 +103,23 @@ public class Main {
 
                                     case "2": { // Modificar comentario
                                         System.out.println("Modificando comentario");
-                                        System.out.println("Ingrese el texto EXACTO del comentario a modificar:");
-                                        String oldDesc = sc.nextLine();
-                                        System.out.println("Ingrese el NUEVO texto del comentario:");
-                                        String newDesc = sc.nextLine();
+                                        String oldDesc;
+                                        do {
+                                            System.out.println("Ingrese el texto EXACTO del comentario a modificar:");
+                                            oldDesc = sc.nextLine().trim();
+                                            if (oldDesc.isEmpty()) {
+                                                System.out.println("Error: La descripción no puede estar vacía.");
+                                            }
+                                        } while (oldDesc.isEmpty());
+                                        
+                                        String newDesc;
+                                        do {
+                                            System.out.println("Ingrese el NUEVO texto del comentario:");
+                                            newDesc = sc.nextLine().trim();
+                                            if (newDesc.isEmpty()) {
+                                                System.out.println("Error: La descripción no puede estar vacía.");
+                                            }
+                                        } while (newDesc.isEmpty());
 
                                         try {
 
@@ -189,45 +206,35 @@ public class Main {
                                 break;
 
                             case "3":
-                                if (t != null) {
 
-                                    Ticket estadoAnterior = bs.undoChanges(t);
+                                Ticket estadoAnterior = bs.undoChanges(t);
 
-                                    if (estadoAnterior != null) {
-                                        t = estadoAnterior;
-                                        System.out.println("Cambio revertido.");
-                                    } else {
-                                        System.out.println("No hay más cambios que revertir.");
-                                    }
+                                if (estadoAnterior != null) {
+                                    t = estadoAnterior;
+                                    System.out.println("Cambio revertido.");
                                 } else {
-                                    System.out.println("No hay CAMBIOS POR EFECTUAR.");
+                                    System.out.println("No hay más cambios que revertir.");
                                 }
+
                                 break;
 
                             case "4": // Rehacer cambios
-                                if (t != null) {
 
-                                    Ticket estadoSiguiente = bs.redoChanges(t);
+                                Ticket estadoSiguiente = bs.redoChanges(t);
 
-                                    if (estadoSiguiente != null) {
-                                        t = estadoSiguiente;
-                                        System.out.println("Cambio rehecho.");
-                                    } else {
-                                        System.out.println("No hay más cambios que rehacer.");
-                                    }
+                                if (estadoSiguiente != null) {
+                                    t = estadoSiguiente;
+                                    System.out.println("Cambio rehecho.");
                                 } else {
-                                    System.out.println("No hay ticket activo.");
+                                    System.out.println("No hay más cambios que rehacer.");
                                 }
+
                                 break;
 
                             case "5":
                                 secondFlagTicket = false;
-                                if (t != null) {
-                                    fm.logTicketState(t);
 
-                                } else {
-                                    System.out.println("No hay ticket para guardar");
-                                }
+                                fm.logTicketState(t);
 
                                 break;
 
@@ -242,49 +249,79 @@ public class Main {
                     bs.printTickets();
                     break;
 
-                case "3":
+                case "3": {
                     System.out.println("Hacer registro de ticket");
 
-                    System.out.println("Ingrese su nombre");
-                    String name = sc.nextLine();
+                    String name;
+                    do {
+                        System.out.println("Ingrese su nombre:");
+                        name = sc.nextLine().trim(); // .trim() elimina espacios en blanco
+                        if (name.isEmpty()) {
+                            System.out.println("Error: El nombre no puede estar vacío. Intente de nuevo.");
+                        }
+                    } while (name.isEmpty());
 
-                    System.out.println("Ingrese su apellido");
-                    String lastname = sc.nextLine();
+                    String lastname;
+                    do {
+                        System.out.println("Ingrese su apellido:");
+                        lastname = sc.nextLine().trim();
+                        if (lastname.isEmpty()) {
+                            System.out.println("Error: El apellido no puede estar vacío. Intente de nuevo.");
+                        }
+                    } while (lastname.isEmpty());
 
-                    System.out.println("Ingrese el numero de su carnet identificativo");
-                    String identityCard = sc.nextLine();
+                    String identityCard;
+                    do {
+                        System.out.println("Ingrese el numero de su carnet identificativo:");
+                        identityCard = sc.nextLine().trim();
+                        if (identityCard.isEmpty()) {
+                            System.out.println("Error: El carnet no puede estar vacío. Intente de nuevo.");
+                        }
+                    } while (identityCard.isEmpty());
 
-                    System.out.println("Ingrese su numero telefonico");
-                    String telephone = sc.nextLine();
+                    String telephone;
+                    do {
+                        System.out.println("Ingrese su numero telefonico:");
+                        telephone = sc.nextLine().trim();
+                        if (telephone.isEmpty()) {
+                            System.out.println("Error: El teléfono no puede estar vacío. Intente de nuevo.");
+                        }
+                    } while (telephone.isEmpty());
 
                     Person newPerson = new Person(name, lastname, identityCard, telephone);
                     Ticket newTicket = new Ticket(newPerson, null, Status.EN_COLA);
 
-                    System.out.println("Ingrese el tipo de transaccion que va a realizar");
-                    System.out.println("======= Tipos de transaccion ======");
-                    System.out.println("1. MATRICULA");
-                    System.out.println("2. HOMOLOGACION");
-                    System.out.println("3. CONTANCIA_CERTIFICADOS");
+                    boolean tipoValido = false;
+                    do {
+                        System.out.println("Ingrese el tipo de transaccion que va a realizar");
+                        System.out.println("======= Tipos de transaccion ======");
+                        System.out.println("1. MATRICULA");
+                        System.out.println("2. HOMOLOGACION");
+                        System.out.println("3. CONTANCIA_CERTIFICADOS");
 
-                    switch (sc.nextLine()) {
-                        case "1":
-                            newTicket.setType(Type.MATRICULA);
-                            break;
-                        case "2":
-                            newTicket.setType(Type.HOMOLOGACION);
-                            break;
-                        case "3":
-                            newTicket.setType(Type.CONTANCIA_CERTIFICADOS);
-                            break;
-                        default:
-                            System.out.println("Opcion no valida");
-                    }
+                        switch (sc.nextLine()) {
+                            case "1":
+                                newTicket.setType(Type.MATRICULA);
+                                tipoValido = true; // Opción válida, salimos del bucle
+                                break;
+                            case "2":
+                                newTicket.setType(Type.HOMOLOGACION);
+                                tipoValido = true; // Opción válida, salimos del bucle
+                                break;
+                            case "3":
+                                newTicket.setType(Type.CONTANCIA_CERTIFICADOS);
+                                tipoValido = true; // Opción válida, salimos del bucle
+                                break;
+                            default:
+                                System.out.println("Opcion no valida. Por favor, elija 1, 2 o 3.");
+                            // tipoValido sigue 'false', el bucle se repetirá
+                        }
+                    } while (!tipoValido); // Repetir mientras no se elija una opción válida
 
                     bs.addToQueue(newTicket);
                     System.out.println("Ticket ingresado de manera correcta");
-                    t = newTicket;
                     break;
-
+                }
                 case "4":
 
                     System.out.println(fm.generateReport());
