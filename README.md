@@ -35,14 +35,22 @@ Al momento de ejecutar el programa se mostrará en consola el menú de las accio
 En la opción de atención de tickets, se abre un submenú 1 que muestra las acciones para realizar la atención de tickets, las cuales son:
 
 
-<img width="943" height="354" alt="{D132472B-9E1B-449B-A9C7-F14CFBB108F8}" src="https://github.com/user-attachments/assets/0d498abf-b210-4bae-a715-e26df774811a" />
+<img width="824" height="311" alt="{B09780D9-ACF6-4D72-8ECE-E40903617641}" src="https://github.com/user-attachments/assets/c060191b-2768-47c2-bda8-4fc3884e3ab6" />
+
+La opción 0, muestra el ticket actual con sus valores
+ 
+En caso de que el usuario, seleccione la opción 1 "Opciones de Comentarios", se muestra un submenú 2
+
+<img width="886" height="270" alt="{B508B5E1-CE4D-4DFA-9C28-383EFE30A368}" src="https://github.com/user-attachments/assets/cb518f54-bc05-42e7-a4d9-3fb8ae2da406" />
 
 
-
-En caso de que el usuario, seleccione la opción de cambiar estados, se muestra un submenú 2
+En caso de que el usuario, seleccione la opción 2 "Cambiar Estados", se muestra un submenú 3
 
 <img width="889" height="347" alt="image" src="https://github.com/user-attachments/assets/2efa9341-4588-40bb-87f4-231499beb277" />
 
+ En caso de seleccionar la opcion 3 de atencion de ticket "Revertir Cambios" regresa el actual al estado previo 
+ En caso de seleccionar la opcion 4 de atencion de ticket "Rehacer Cambios" revierte el ultimo cambio previamente revertido
+ En caso de seleccionar la opcion 5 de atencion de ticket "Finalizar Atencion de Ticket actual" finaliza la atencion del ticket y lo guarda en el historial
 
 
 4.5 La opción 2 muestra los tickets que se encuentran disponibles 
@@ -50,7 +58,7 @@ En caso de que el usuario, seleccione la opción de cambiar estados, se muestra 
 <img width="896" height="353" alt="image" src="https://github.com/user-attachments/assets/20c5213f-aded-4546-b6c9-2c167f8a77cf" />
 
 
-4.6 La opción 3 genera los tickets de manera manual, pidiendo como parametros: nombre, apellido, numero de carnte identificativo, número telefónico y el tipo de trasnsacción
+4.6 La opción 3 genera los tickets de manera manual, pidiendo como parametros: nombre, apellido, numero de carnet identificativo, número telefónico y el tipo de trasnsacción
 
 <img width="882" height="461" alt="image" src="https://github.com/user-attachments/assets/fcdad13f-5459-435c-a969-eadcf6be11a4" />
 
