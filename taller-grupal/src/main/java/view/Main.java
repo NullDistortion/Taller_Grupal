@@ -48,9 +48,9 @@ public class Main {
                     sc.nextLine();
 
                     for (int i = 0; i < n; i++) {
-                        bs.addToQueue(Utility.generateTicket());
-                        System.out.println("Ticket ingresado de manera correcta");
+                        bs.addToQueue(Utility.generateTicket());   
                     }
+                    System.out.println("Se han ingresado x"+n+" tickets");
 
                     break;
 
@@ -261,7 +261,7 @@ public class Main {
         System.out.println("2. Cambiar estado");
         System.out.println("3. Revertir cambios");
         System.out.println("4. Rehacer cambios");
-        System.out.println("5. Volver");
+        System.out.println("5. Finalizar Atencion de Ticket actual");
         System.out.println("===================================");
         System.out.println("Ingrese una opcion: ");
     }
