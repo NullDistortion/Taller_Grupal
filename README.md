@@ -19,14 +19,16 @@ Finalmente, el sistema maneja los Casos Borde validando rigurosamente la entrada
 
 Al momento de ejecutar el programa se mostrará en consola el menú de las acciones que se pueden realizar.
 
-<img width="880" height="322" alt="image" src="https://github.com/user-attachments/assets/c9f90ee7-5c7a-4671-a373-d4fbbcea0ba7" />
+<img width="889" height="224" alt="{A26B1737-D037-4989-B1E8-BA5128168F4C}" src="https://github.com/user-attachments/assets/38e3ee56-d24b-451a-a83c-80fb7712be6b" />
+
 
  El usuario debe ingresar el numero de la acción que desea realizar. 
  
  La opción 0 es para generar de manera automática la cantidad de tickets del usuario
  
 
- <img width="989" height="452" alt="image" src="https://github.com/user-attachments/assets/95ecca24-139e-4a53-a288-69a799e5059b" /> 
+ <img width="860" height="296" alt="{70AEA02B-5FB8-4C95-B211-0778C8C72835}" src="https://github.com/user-attachments/assets/ce20c07b-8456-49ad-a26a-571e45ff6407" />
+
  
  
 
