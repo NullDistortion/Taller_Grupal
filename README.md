@@ -19,7 +19,7 @@ Finalmente, el sistema maneja los Casos Borde validando rigurosamente la entrada
 
 Al momento de ejecutar el programa se mostrará en consola el menú de las acciones que se pueden realizar.
 
-<img width="880" height="322" alt="image" src="https://github.com/user-attachments/assets/97a5ce32-1079-4763-9542-a675700dceb8" />
+<img width="880" height="322" alt="image" src="https://github.com/user-attachments/assets/c9f90ee7-5c7a-4671-a373-d4fbbcea0ba7" />
 
  El usuario debe ingresar el numero de la acción que desea realizar. 
  
@@ -33,11 +33,11 @@ Al momento de ejecutar el programa se mostrará en consola el menú de las accio
 En la opción de atención de tickets, se abre un submenú 1 que muestra las acciones para realizar la atención de tickets, las cuales son:
 
 
-<img width="942" height="354" alt="image" src="https://github.com/user-attachments/assets/19af8134-53c0-4623-b531-1b0243734891" />
+<img width="943" height="354" alt="{D132472B-9E1B-449B-A9C7-F14CFBB108F8}" src="https://github.com/user-attachments/assets/0d498abf-b210-4bae-a715-e26df774811a" />
 
 
 
-En caso de que el usuario, seleccione la opción de cambiar estados, se mustra un submenú 2
+En caso de que el usuario, seleccione la opción de cambiar estados, se muestra un submenú 2
 
 <img width="889" height="347" alt="image" src="https://github.com/user-attachments/assets/2efa9341-4588-40bb-87f4-231499beb277" />
 
@@ -53,7 +53,7 @@ En caso de que el usuario, seleccione la opción de cambiar estados, se mustra u
 <img width="882" height="461" alt="image" src="https://github.com/user-attachments/assets/fcdad13f-5459-435c-a969-eadcf6be11a4" />
 
 
-4.7 La opción 4 imprime el historial de los tickets.
+4.7 La opción 4 imprime el historial de los tickets Atendidos Junto a su ultimo estado.
 
 <img width="1385" height="345" alt="image" src="https://github.com/user-attachments/assets/73b37f66-b29d-41c5-8684-7cdadbf37bf9" />
 
