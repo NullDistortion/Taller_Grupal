@@ -33,7 +33,9 @@ public class TicketsQueue {
         }
         Ticket aux = head.getData();
         head = head.getNext();
-        if (head == null) tail = null;
+        if (head == null) {
+            tail = null;
+        }
         length--;
         return aux;
     }
@@ -64,11 +66,13 @@ public class TicketsQueue {
             return "La cola esta vacia.";
         }
         StringBuilder sb = new StringBuilder("[");
-        Node<Ticket> current = head;
-        while (current != null) {
-            sb.append(current.getData().toString());
-            if (current.getNext() != null) sb.append(" <- ");
-            current = current.getNext();
+        Node<Ticket> actual = head;
+        while (actual != null) {
+            sb.append(actual.getData().toString());
+            if (actual.getNext() != null) {
+                sb.append(" <- ");
+            }
+            actual = actual.getNext();
         }
         sb.append("]");
         return sb.toString();

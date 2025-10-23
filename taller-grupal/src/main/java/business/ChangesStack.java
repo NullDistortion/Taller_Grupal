@@ -19,14 +19,15 @@ public class ChangesStack {
         this.currentSize = 0;
     }
 
-    // Metodo para agregar una accion a la pila de UNDO
+// Metodo para agregar una accion a la pila de UNDO
     public void pushUndo(Ticket value) {
         if (value == null) {
             System.out.println("No se puede registrar un cambio no existente");
             return;
         }
-        if (currentSize >= MAX_LIMIT) removeTail();
-
+        if (currentSize >= MAX_LIMIT) {
+            removeTail();
+        }
         DoubleNode<Ticket> newNode = new DoubleNode<>(value);
         if (undo == null) {
             undo = newNode;
@@ -38,7 +39,7 @@ public class ChangesStack {
         }
         currentSize++;
     }
-
+    
     // Metodo para eliminar el ultimo elemento agregado a la pila UNDO
     public Ticket popUndo() {
         if (isEmptyUndo()) {
@@ -47,8 +48,11 @@ public class ChangesStack {
         }
         DoubleNode<Ticket> auxNode = undo;
         undo = auxNode.getNext();
-        if (undo != null) undo.setPrev(null);
-        else tail = null;
+        if (undo != null) {
+            undo.setPrev(null);
+        } else {
+            tail = null;
+        }
         currentSize--;
         return auxNode.getData();
     }
@@ -77,13 +81,16 @@ public class ChangesStack {
 
     // Metodo para eliminar el ultimo elemento (tail) de la pila UNDO cuando excede el limite
     public void removeTail() {
-        if (tail == null) return;
+        if (tail == null) {
+            return;
+        }
         DoubleNode<Ticket> newTail = tail.getPrev();
         if (newTail != null) {
             newTail.setNext(null);
             tail.setPrev(null);
             tail = newTail;
         } else {
+
             undo = null;
             tail = null;
         }
@@ -92,17 +99,17 @@ public class ChangesStack {
 
     // Metodo para limpiar la pila REDO
     public void clearRedo() {
-        redo = null;
+        this.redo = null;
     }
 
     // Metodo para verificar si la pila UNDO esta vacia
     public boolean isEmptyUndo() {
-        return undo == null;
+        return this.undo == null;
     }
 
     // Metodo para verificar si la pila REDO esta vacia
     public boolean isEmptyRedo() {
-        return redo == null;
+        return this.redo == null;
     }
 
     // Metodo para obtener el tamaño actual de la pila UNDO

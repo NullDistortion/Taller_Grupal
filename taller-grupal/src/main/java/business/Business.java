@@ -90,7 +90,7 @@ public class Business {
         return false;
     }
 
-    public boolean validateInput(String name, String lastname, String identityCard, String telephone) {
+     public boolean validateInput(String name, String lastname, String identityCard, String telephone) {
         if (name.trim().isEmpty() || lastname.trim().isEmpty() || identityCard.trim().isEmpty()
                 || telephone.trim().isEmpty()) {
             System.out.println("No se pudo crear el ticket, datos no validos");
@@ -108,5 +108,5 @@ public class Business {
         }
         return true;
     }
-
+     
 }
