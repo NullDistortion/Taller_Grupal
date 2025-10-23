@@ -49,7 +49,9 @@ En caso de que el usuario, seleccione la opción 2 "Cambiar Estados", se muestra
 <img width="889" height="347" alt="image" src="https://github.com/user-attachments/assets/2efa9341-4588-40bb-87f4-231499beb277" />
 
  En caso de seleccionar la opcion 3 de atencion de ticket "Revertir Cambios" regresa el actual al estado previo 
+ 
  En caso de seleccionar la opcion 4 de atencion de ticket "Rehacer Cambios" revierte el ultimo cambio previamente revertido
+ 
  En caso de seleccionar la opcion 5 de atencion de ticket "Finalizar Atencion de Ticket actual" finaliza la atencion del ticket y lo guarda en el historial
 
 
