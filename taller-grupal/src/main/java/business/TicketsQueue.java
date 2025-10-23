@@ -64,11 +64,11 @@ public class TicketsQueue {
             return "La cola esta vacia.";
         }
         StringBuilder sb = new StringBuilder("[");
-        Node<Ticket> actual = head;
-        while (actual != null) {
-            sb.append(actual.getData().toString());
-            if (actual.getNext() != null) sb.append(" <- ");
-            actual = actual.getNext();
+        Node<Ticket> current = head;
+        while (current != null) {
+            sb.append(current.getData().toString());
+            if (current.getNext() != null) sb.append(" <- ");
+            current = current.getNext();
         }
         sb.append("]");
         return sb.toString();
