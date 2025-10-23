@@ -29,12 +29,12 @@ public class Main {
             switch (sc.nextLine()) {
                 case "0":
                     System.out.println("Cuantos tickets desea generar");
-                    int n = 0;
+                    byte n = 0;
                     boolean flagInt = true;
                     do {
                         try {
                             System.out.print("Por favor, ingresa un numero entero: ");
-                            n = sc.nextInt();
+                            n = sc.nextByte();
                             if (n > 0) {
                                 flagInt = false;
                             } else {
