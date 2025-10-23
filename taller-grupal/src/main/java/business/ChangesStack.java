@@ -19,102 +19,93 @@ public class ChangesStack {
         this.currentSize = 0;
     }
 
-    //Inserta un elemento arriba de la pila UNDO para los cambios que se rehacen
+    // Metodo para agregar una accion a la pila de UNDO
     public void pushUndo(Ticket value) {
-        DoubleNode newNode = new DoubleNode(value);
-
-        if (this.undo == null) {
-            this.undo = newNode;
-            this.tail = newNode;
-        } else {
-
-            newNode.setNext(this.undo);
-            this.undo.setPrev(newNode);
-            this.undo = newNode;
-
-        }
-        this.currentSize++;
-        if (currentSize >= MAX_LIMIT) {
-            removeTail();
-        }
-    }
-
-    // Elimina y devuelve el elemento de la cima de la pila UNDO.
-    public Ticket popUndo() {
-        if (isEmptyUndo()) {
-            return null;
-        }
-
-        DoubleNode<Ticket> auxNode = this.undo;
-        this.undo = auxNode.getNext();
-
-        if (this.undo != null) {
-            this.undo.setPrev(null);
-        } else {
-            this.tail = null;
-        }
-
-        this.currentSize--;
-        return auxNode.getData();
-    }
-
-    //Inserta un elemento arriba de la pila REDO para los cambios que se rehacen
-    public void pushRedo(Ticket value) {
-        Node newNode = new Node(value);
-
-        if (this.redo == null) {
-            this.redo = newNode;
-        } else {
-
-            newNode.setNext(this.redo);
-            this.redo = newNode;
-
-        }
-    }
-
-    public Ticket popRedo() {
-        if (isEmptyRedo()) {
-            return null;
-        }
-
-        Node<Ticket> auxNode = this.redo;
-        this.redo = auxNode.getNext();
-
-        return auxNode.getData();
-    }
-
-    public void removeTail() {
-
-        if (this.tail == null) {
+        if (value == null) {
+            System.out.println("No se puede registrar un cambio no existente");
             return;
         }
+        if (currentSize >= MAX_LIMIT) removeTail();
 
-        DoubleNode<Ticket> newTail = this.tail.getPrev();
+        DoubleNode<Ticket> newNode = new DoubleNode<>(value);
+        if (undo == null) {
+            undo = newNode;
+            tail = newNode;
+        } else {
+            newNode.setNext(undo);
+            undo.setPrev(newNode);
+            undo = newNode;
+        }
+        currentSize++;
+    }
 
+    // Metodo para eliminar el ultimo elemento agregado a la pila UNDO
+    public Ticket popUndo() {
+        if (isEmptyUndo()) {
+            System.out.println("No hay acciones para deshacer");
+            return null;
+        }
+        DoubleNode<Ticket> auxNode = undo;
+        undo = auxNode.getNext();
+        if (undo != null) undo.setPrev(null);
+        else tail = null;
+        currentSize--;
+        return auxNode.getData();
+    }
+
+    // Metodo para agregar una accion a la pila REDO
+    public void pushRedo(Ticket value) {
+        if (value == null) {
+            System.out.println("No se puede aplicar el cambio no existente");
+            return;
+        }
+        Node<Ticket> newNode = new Node<>(value);
+        newNode.setNext(redo);
+        redo = newNode;
+    }
+
+    // Metodo para eliminar el ultimo elemento agregado a la pila REDO
+    public Ticket popRedo() {
+        if (isEmptyRedo()) {
+            System.out.println("No hay acciones para rehacer");
+            return null;
+        }
+        Node<Ticket> auxNode = redo;
+        redo = auxNode.getNext();
+        return auxNode.getData();
+    }
+
+    // Metodo para eliminar el ultimo elemento (tail) de la pila UNDO cuando excede el limite
+    public void removeTail() {
+        if (tail == null) return;
+        DoubleNode<Ticket> newTail = tail.getPrev();
         if (newTail != null) {
             newTail.setNext(null);
-            this.tail.setPrev(null);
-            this.tail = newTail;
+            tail.setPrev(null);
+            tail = newTail;
         } else {
-            this.undo = null;
-            this.tail = null;
+            undo = null;
+            tail = null;
         }
-
-        this.currentSize--;
+        currentSize--;
     }
 
+    // Metodo para limpiar la pila REDO
     public void clearRedo() {
-        this.redo = null;
+        redo = null;
     }
 
+    // Metodo para verificar si la pila UNDO esta vacia
     public boolean isEmptyUndo() {
-        return this.undo == null;
+        return undo == null;
     }
 
+    // Metodo para verificar si la pila REDO esta vacia
     public boolean isEmptyRedo() {
-        return this.redo == null;
+        return redo == null;
     }
 
+    // Metodo para obtener el tamaño actual de la pila UNDO
     public int size() {
         return currentSize;
     }

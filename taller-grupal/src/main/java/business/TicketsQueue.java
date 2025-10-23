@@ -5,63 +5,69 @@ import theNODE.Node;
 
 public class TicketsQueue {
 
-    Node<Ticket> queue;
-
     private Node<Ticket> head;
     private Node<Ticket> tail;
     private int length;
 
-    // Agregar un elemento al final
+    // Metodo para insertar un ticket al final de la cola
     public void enqueue(Ticket node) {
-        Node<Ticket> newnode = new Node<>(node);
+        if (node == null) {
+            System.out.println("No se puede agregar un ticket nulo");
+            return;
+        }
+        Node<Ticket> newNode = new Node<>(node);
         if (isEmpty()) {
-            head = tail = newnode;
+            head = tail = newNode;
         } else {
-            tail.setNext(newnode);
-            tail = newnode;
+            tail.setNext(newNode);
+            tail = newNode;
         }
         length++;
     }
 
-    // Eliminar y devolver el elemento del frente
+    // Metodo para eliminar el primer elemento de la cola
     public Ticket dequeue() {
         if (isEmpty()) {
+            System.out.println("No hay tickets en la cola");
             return null;
         }
         Ticket aux = head.getData();
-        head=head.getNext();
-        if (head == null) {
-            tail = null; // cola vacía, -> ambos null
-        }
+        head = head.getNext();
+        if (head == null) tail = null;
         length--;
         return aux;
     }
 
+    // Metodo que devuelve verdadero si la cola esta vacia
     public boolean isEmpty() {
         return length == 0;
     }
 
-    // Ver el elemento del frente sin eliminarlo
+    // Metodo que devuelve el primer elemento de la cola sin eliminarlo
     public String peek() {
-        return isEmpty() ? null : head.getData().toString();
+        if (isEmpty()) {
+            System.out.println("La cola esta vacia");
+            return null;
+        }
+        return head.getData().toString();
     }
 
+    // Metodo que devuelve el tamaño de la cola
     public int size() {
         return length;
     }
 
+    // Metodo toString que muestra todos los tickets en la cola
     @Override
     public String toString() {
+        if (isEmpty()) {
+            return "La cola esta vacia.";
+        }
         StringBuilder sb = new StringBuilder("[");
-        Node<Ticket> actual = head; 
+        Node<Ticket> actual = head;
         while (actual != null) {
-            
-            sb.append(actual.getData().toString()); 
-            
-            if (actual.getNext() != null) {
-                sb.append(" <- ");
-            }
-            
+            sb.append(actual.getData().toString());
+            if (actual.getNext() != null) sb.append(" <- ");
             actual = actual.getNext();
         }
         sb.append("]");

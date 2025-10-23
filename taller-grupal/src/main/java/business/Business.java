@@ -90,4 +90,23 @@ public class Business {
         return false;
     }
 
+    public boolean validateInput(String name, String lastname, String identityCard, String telephone) {
+        if (name.trim().isEmpty() || lastname.trim().isEmpty() || identityCard.trim().isEmpty()
+                || telephone.trim().isEmpty()) {
+            System.out.println("No se pudo crear el ticket, datos no validos");
+            return false;
+        }
+
+        if (!name.matches("[a-zA-Z]+") || !lastname.matches("[a-zA-Z]+")) {
+            System.out.println("El nombre y apellido solo deben contener letras");
+            return false;
+        }
+
+        if (!identityCard.matches("\\d+") || !telephone.matches("\\d+")) {
+            System.out.println("El ID y el telefono solo deben contener numeros");
+            return false;
+        }
+        return true;
+    }
+
 }
