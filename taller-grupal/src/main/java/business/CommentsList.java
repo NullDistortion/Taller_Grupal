@@ -40,8 +40,7 @@ public class CommentsList {
 
     public void add(String description) throws IllegalArgumentException {
         if (description == null || description.trim().isEmpty()) {
-            System.out.println("No se puede añadir un comentario que no existe");
-            return;
+           throw new IllegalArgumentException("No se puede añadir un comentario nulo o vacío.");
         }
 
 // La validación del constructor de Comments lanza la excepción
@@ -59,10 +58,9 @@ public class CommentsList {
         }
     }
 
-    public boolean deleteComment(String description) {
-        if (description == null || description.trim().isEmpty()) {
-            System.out.println("Descripcion vacia, no eliminar comentario");
-            return false;
+    public boolean deleteComment(String description) throws IllegalArgumentException{
+         if (description == null || description.trim().isEmpty()) {
+           throw new IllegalArgumentException("Descripcion vacia, no eliminar comentario");
         }
         if (head == null) {
             return false;

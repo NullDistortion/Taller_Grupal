@@ -30,17 +30,25 @@ public class Business {
 
     public void registerChange(Ticket ticket){
         changesHistorial.pushUndo(new Ticket(ticket));
+        changesHistorial.clearRedo();
     }
 
     public Ticket undoChanges(Ticket actualTicket){
+        if (changesHistorial.isEmptyUndo()) {
+            return null; 
+        }
         changesHistorial.pushRedo(new Ticket(actualTicket));
         return changesHistorial.popUndo();
     }
 
     public Ticket redoChanges(Ticket actualTicket){
+        if (changesHistorial.isEmptyRedo()) {
+            return null; 
+        }
         changesHistorial.pushUndo(new Ticket(actualTicket));
         return changesHistorial.popRedo();
     }
+    
     public void discardLastUndo() {
         changesHistorial.popUndo();
     }

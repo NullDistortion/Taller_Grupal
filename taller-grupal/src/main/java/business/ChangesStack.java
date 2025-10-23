@@ -22,7 +22,6 @@ public class ChangesStack {
 // Metodo para agregar una accion a la pila de UNDO
     public void pushUndo(Ticket value) {
         if (value == null) {
-            System.out.println("No se puede registrar un cambio no existente");
             return;
         }
         if (currentSize >= MAX_LIMIT) {
@@ -43,7 +42,6 @@ public class ChangesStack {
     // Metodo para eliminar el ultimo elemento agregado a la pila UNDO
     public Ticket popUndo() {
         if (isEmptyUndo()) {
-            System.out.println("No hay acciones para deshacer");
             return null;
         }
         DoubleNode<Ticket> auxNode = undo;
@@ -60,7 +58,6 @@ public class ChangesStack {
     // Metodo para agregar una accion a la pila REDO
     public void pushRedo(Ticket value) {
         if (value == null) {
-            System.out.println("No se puede aplicar el cambio no existente");
             return;
         }
         Node<Ticket> newNode = new Node<>(value);
@@ -71,7 +68,6 @@ public class ChangesStack {
     // Metodo para eliminar el ultimo elemento agregado a la pila REDO
     public Ticket popRedo() {
         if (isEmptyRedo()) {
-            System.out.println("No hay acciones para rehacer");
             return null;
         }
         Node<Ticket> auxNode = redo;
@@ -116,4 +112,13 @@ public class ChangesStack {
     public int size() {
         return currentSize;
     }
+
+    public Node<Ticket> getRedo() {
+        return redo;
+    }
+
+    public void setRedo(Node<Ticket> redo) {
+        this.redo = redo;
+    }
+    
 }
