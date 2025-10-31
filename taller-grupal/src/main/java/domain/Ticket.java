@@ -7,12 +7,15 @@ public class Ticket {
     private Person person;
     private Type type;
     private Status status;
+    private boolean priority;
 
-    public Ticket(Person person, Type type, Status status) {
+    public Ticket(Person person, Type type, Status status,boolean priority) {
         this.person = person;
         this.type = type;
         this.status = status;
+        this.priority=priority;
     }
+    
     public Ticket(Ticket other) {
     // Llama al constructor de copia de Person
     this.person = new Person(other.person); 
@@ -45,6 +48,15 @@ public class Ticket {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public boolean isPriority() {
+        return priority;
+    }
+
+    public void setPriority(boolean priority) {
+        this.priority = priority;
+    }
+    
     @Override
     public String toString() {
         // Ejemplo: "[Persona: Juan Pérez (11223344) | Tipo: MATRICULA | Estado: EN_ATENCION]"

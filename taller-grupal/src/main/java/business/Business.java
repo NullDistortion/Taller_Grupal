@@ -4,21 +4,20 @@ import domain.Ticket;
 import enums.Status;
 
 public class Business {
-    private final TicketsQueue queue;
     private ChangesStack changesHistorial;
     
 
     public Business() {
-        this.queue = new TicketsQueue();
+       // this.queue = new TicketsManager();
         this.changesHistorial = new ChangesStack();
     }
 
     public void addToQueue(Ticket ticket){
-        queue.enqueue(ticket);
+        //queue.enqueueCommon(ticket);
     }
 
     public Ticket  processTicked(){
-        Ticket actualTicket= queue.dequeue();
+        /*Ticket actualTicket= queue.dequeueCommon();
         if (actualTicket == null) {
             return null;
         }
@@ -26,6 +25,8 @@ public class Business {
         registerChange(new Ticket(actualTicket));
         actualTicket.setStatus(Status.EN_ATENCION);
         return actualTicket;
+        */
+        return null;
     }
 
     public void registerChange(Ticket ticket){
@@ -54,7 +55,7 @@ public class Business {
     }
 
     public void printTickets() {
-        System.out.println(queue.toString());
+        //System.out.println(queue.toString());
     }
     
     public void printCommentsOfCurrentTicket(Ticket ticket) {
