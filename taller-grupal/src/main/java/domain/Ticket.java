@@ -7,7 +7,7 @@ public class Ticket {
     private Person person;
     private Type type;
     private Status status;
-    private boolean priority;
+    private boolean priority; //TODO Setear logica de inicio, valor por defecto ahora false
 
     public Ticket(Person person, Type type, Status status,boolean priority) {
         this.person = person;
@@ -17,10 +17,7 @@ public class Ticket {
     }
     
     public Ticket(Ticket other) {
-    // Llama al constructor de copia de Person
-    this.person = new Person(other.person); 
-    
-    // Los Enums son inmutables, se pueden copiar directamente
+    this.person = new Person(other.person);
     this.type = other.type;     
     this.status = other.status; 
 }
