@@ -1,7 +1,5 @@
 package domain;
 
-import business.CommentsList;
-
 public class Person {
 
     private String name;
@@ -31,29 +29,24 @@ public class Person {
         this.comments = new CommentsList();
     }
 
-    //Refactorizacion delegada a CommentList
-    public void addComment(String description) throws IllegalArgumentException {
-        this.comments.add(description);
+    public CommentsList getComments() {
+        return this.comments;
     }
 
-    //Refactorizacion delegada a CommentList
-    public boolean deleteComment(String description) {
-        return this.comments.deleteComment(description);
+    public String getName() {
+        return name;
     }
 
-    //Refactorizacion delegada a CommentList
-    public boolean updateComment(String oldDescription, String newDescription) {
-        return this.comments.updateComment(oldDescription, newDescription);
+    public String getLastName() {
+        return lastName;
     }
 
-    //Refactorizacion delegada a CommentList
-    public void printComments() {
-        if (comments == null) {
-            System.out.println("No hay comentarios para " + this.name);
-            return;
-        }
-        System.out.println("Comentarios para: " + this.name + " " + this.lastName);
-        System.out.println("  -> " + this.comments.toString());
+    public String getIdentityCard() {
+        return identityCard;
+    }
+
+    public String getTelephone() {
+        return telephone;
     }
 
     @Override

@@ -4,7 +4,7 @@ import domain.Ticket;
 import theNODE.DoubleNode;
 import theNODE.Node;
 
-public class ChangesStack {
+public class UndoRedoManager {
 
     private DoubleNode<Ticket> undo;
     private DoubleNode<Ticket> tail;
@@ -12,7 +12,7 @@ public class ChangesStack {
     private final int MAX_LIMIT = 6;
     private int currentSize;
 
-    public ChangesStack() {
+    public UndoRedoManager() {
         this.undo = null;
         this.redo = null;
         this.tail = null;

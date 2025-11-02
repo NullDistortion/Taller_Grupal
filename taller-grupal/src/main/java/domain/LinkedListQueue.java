@@ -2,7 +2,7 @@ package domain;
 
 import theNODE.Node;
 
-public class CommonQueue<T> implements Queue<T> {
+public class LinkedListQueue<T> implements Queue<T> {
     private Node<T> head;
     private Node<T> tail;
     private int length;

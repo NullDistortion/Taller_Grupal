@@ -6,6 +6,7 @@ public class Comments {
 
     private String description;
     private LocalDate date;
+    private int id;
 
     public Comments(String description, LocalDate date) throws IllegalArgumentException {
 
@@ -30,6 +31,14 @@ public class Comments {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

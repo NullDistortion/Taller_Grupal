@@ -1,105 +1,149 @@
 package business;
 
+import domain.CommentsList;
+import domain.Person;
+import domain.PrioritizedTicketQueue;
+import domain.Queue;
 import domain.Ticket;
 import enums.Status;
 
 public class Business {
-    private ChangesStack changesHistorial;
-    
+
+    private UndoRedoManager changesHistorial;
+    private Queue<Ticket> ticketQueue;
 
     public Business() {
-       // this.queue = new TicketsManager();
-        this.changesHistorial = new ChangesStack();
+        this.ticketQueue = new PrioritizedTicketQueue();
+        this.changesHistorial = new UndoRedoManager();
     }
 
-    public void addToQueue(Ticket ticket){
-        //queue.enqueueCommon(ticket);
+    public void addToQueue(Ticket ticket) {
+        ticketQueue.enqueue(ticket);
     }
 
-    public Ticket  processTicked(){
-        /*Ticket actualTicket= queue.dequeueCommon();
+    public Ticket processTicket() {
+        Ticket actualTicket = ticketQueue.dequeue();
+
         if (actualTicket == null) {
             return null;
         }
-        changesHistorial=new ChangesStack();
+        changesHistorial = new UndoRedoManager();
         registerChange(new Ticket(actualTicket));
         actualTicket.setStatus(Status.EN_ATENCION);
         return actualTicket;
-        */
-        return null;
     }
 
-    public void registerChange(Ticket ticket){
+    public void registerChange(Ticket ticket) {
         changesHistorial.pushUndo(new Ticket(ticket));
         changesHistorial.clearRedo();
     }
 
-    public Ticket undoChanges(Ticket actualTicket){
+    public Ticket undoChanges(Ticket actualTicket) {
         if (changesHistorial.isEmptyUndo()) {
-            return null; 
+            return null;
         }
         changesHistorial.pushRedo(new Ticket(actualTicket));
         return changesHistorial.popUndo();
     }
 
-    public Ticket redoChanges(Ticket actualTicket){
+    public Ticket redoChanges(Ticket actualTicket) {
         if (changesHistorial.isEmptyRedo()) {
-            return null; 
+            return null;
         }
         changesHistorial.pushUndo(new Ticket(actualTicket));
         return changesHistorial.popRedo();
     }
-    
+
     public void discardLastUndo() {
         changesHistorial.popUndo();
     }
 
     public void printTickets() {
-        //System.out.println(queue.toString());
+        System.out.println(ticketQueue.toString());
     }
-    
+
+    public boolean addCommentToCurrentTicket(Ticket ticket, String commentDescription) throws IllegalArgumentException {
+
+        if (ticket == null) {
+            throw new IllegalArgumentException("No hay ningún ticket en atención.");
+        }
+
+        this.registerChange(ticket);
+        try {
+            //    Business -> pide Ticket -> pide Person -> pide CommentsList -> ejecuta .add()
+            Person person = ticket.getPerson();
+            CommentsList list = person.getComments();
+            list.addComment(commentDescription);
+
+            System.out.println("Comentario añadido."); 
+            return true;
+
+        } catch (IllegalArgumentException e) {
+            this.discardLastUndo(); 
+            throw e;
+        }
+    }
+
+    public boolean deleteCommentFromCurrentTicket(Ticket ticket, int position) {
+        if (ticket == null) {
+            System.out.println("No hay ningún ticket en atención.");
+            return false;
+        }
+        this.registerChange(ticket);
+
+        try {
+            //    Business -> pide Ticket -> pide Person -> pide CommentsList -> ejecuta .deleteCommentByPosition()
+            Person person = ticket.getPerson();
+            CommentsList list = person.getComments();
+            boolean success = list.deleteCommentByPosition(position);
+            if (!success) {
+                this.discardLastUndo();
+                System.out.println("No se encontró un comentario en la posición " + position);
+            }
+            return success;
+        } catch (Exception e) {
+            this.discardLastUndo();
+            throw e;
+        }
+    }
+
+    //Actualiza un comentario del ticket que está en atención.
+    public boolean updateCommentOnCurrentTicket(int position, String newDesc, Ticket ticket) {
+        if (ticket == null) {
+            System.out.println("No hay ningún ticket en atención.");
+            return false;
+        }
+
+        this.registerChange(ticket);
+        try {
+            //    Business -> pide Ticket -> pide Person -> pide CommentsList -> ejecuta .updateCommentByPosition()
+            Person person = ticket.getPerson();
+            CommentsList list = person.getComments();
+            boolean success = list.updateCommentByPosition(position, newDesc);
+            if (!success) {
+                this.discardLastUndo();
+                System.out.println("No se encontró un comentario en la posición " + position);
+            }
+            return success;
+        } catch (Exception e) {
+            this.discardLastUndo();
+            throw e;
+        }
+    }
+
     public void printCommentsOfCurrentTicket(Ticket ticket) {
         if (ticket != null) {
-            // Llama al método de la persona de ese ticket
-            ticket.getPerson().printComments(); 
+            Person person = ticket.getPerson();
+            CommentsList comments = person.getComments();
+
+            System.out.println("Comentarios para: " + person.getName() + " " + person.getLastName());
+            System.out.println("  -> " + comments.toString());
         } else {
             System.out.println("No hay ningún ticket en atención.");
         }
     }
 
-   
-     //Añade un comentario al ticket que está en atención.
-     
-    public void addCommentToCurrentTicket(String description,Ticket ticket) {
-        if (ticket != null) {
-            ticket.getPerson().addComment(description);
-            System.out.println("Comentario añadido.");
-        } else {
-            System.out.println("No hay ningún ticket en atención.");
-        }
-    }
-
-    
-     // Elimina un comentario del ticket que está en atención.
-     
-    public boolean deleteCommentFromCurrentTicket(String description,Ticket ticket) {
-        if (ticket != null) {
-            return ticket.getPerson().deleteComment(description);
-        }
-        return false;
-    }
-
-    
-     //Actualiza un comentario del ticket que está en atención.
-    
-    public boolean updateCommentOnCurrentTicket(String oldDesc, String newDesc,Ticket ticket) {
-        if (ticket != null) {
-            return ticket.getPerson().updateComment(oldDesc, newDesc);
-        }
-        return false;
-    }
-
-     public boolean validateInput(String name, String lastname, String identityCard, String telephone) {
+    public boolean validateInput(String name, String lastname, String identityCard, String telephone) {
         if (name.trim().isEmpty() || lastname.trim().isEmpty() || identityCard.trim().isEmpty()
                 || telephone.trim().isEmpty()) {
             System.out.println("No se pudo crear el ticket, datos no validos");
@@ -117,5 +161,5 @@ public class Business {
         }
         return true;
     }
-     
+
 }

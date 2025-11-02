@@ -3,11 +3,11 @@ package domain;
 import domain.Ticket;
 
 
-public class PriorityQueue implements Queue<Ticket> {
+public class PrioritizedTicketQueue implements Queue<Ticket> {
     
     // Usa dos colas comunes internamente
-    private Queue<Ticket> priorityQueue = new CommonQueue<>();
-    private Queue<Ticket> commonQueue = new CommonQueue<>();
+    private Queue<Ticket> priorityQueue = new LinkedListQueue<>();
+    private Queue<Ticket> commonQueue = new LinkedListQueue<>();
 
     @Override
     public void enqueue(Ticket ticket) {

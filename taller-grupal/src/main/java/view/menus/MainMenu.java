@@ -66,7 +66,7 @@ public class MainMenu implements Menu {
                 }
 
                 case "1": {
-                    t = bs.processTicked();
+                    t = bs.processTicket();
                     if (t == null) {
                         System.out.println("No hay tickets en cola.");
                         break;
