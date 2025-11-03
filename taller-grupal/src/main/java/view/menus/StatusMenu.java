@@ -2,7 +2,6 @@ package view.menus;
 
 import java.util.Scanner;
 import business.Business;
-import business.FileManager;
 import domain.Ticket;
 import enums.Status;
 import view.Menu;
@@ -11,51 +10,68 @@ public class StatusMenu implements Menu {
 
     @Override
     public void showMenu() {
-        System.out.println("Escoga la accion que desee realizar");
-        System.out.println("===================================");
-        System.out.println("1. Cambiar estado a En Cola");
-        System.out.println("2. Cambiar estado a En Atencion");
-        System.out.println("3. Cambiar estado a En Proceso");
-        System.out.println("4. Cambiar estado a Documento Pendiente");
-        System.out.println("5. Cambiar estado a Completado");
+        System.out.println("\n=== CAMBIAR ESTADO ===");
+        System.out.println("1. EN_COLA");
+        System.out.println("2. EN_ATENCION");
+        System.out.println("3. EN_PROCESO");
+        System.out.println("4. PENDIENTE_DOCS");
+        System.out.println("5. COMPLETADO");
         System.out.println("6. Regresar");
-        System.out.println("===================================");
-        System.out.print("Ingrese una opcion: ");
+        System.out.print("Seleccione una opción: ");
     }
 
     @Override
-    public Ticket handleInput(Scanner sc, Business bs, FileManager fm, Ticket t) {
-        showMenu();
-        String opt = sc.nextLine();
-
-        switch (opt) {
-            case "1":
-                bs.registerChange(t);
-                t.setStatus(Status.EN_COLA);
-                break;
-            case "2":
-                bs.registerChange(t);
-                t.setStatus(Status.EN_ATENCION);
-                break;
-            case "3":
-                bs.registerChange(t);
-                t.setStatus(Status.EN_PROCESO);
-                break;
-            case "4":
-                bs.registerChange(t);
-                t.setStatus(Status.PENDIENTE_DOCS);
-                break;
-            case "5":
-                bs.registerChange(t);
-                t.setStatus(Status.COMPLETADO);
-                break;
-            case "6":
-                System.out.println("Regresando al menu anterior");
-                break;
-            default:
-                System.out.println("Opcion no valida");
+    public Ticket handleInput(Business bs, Ticket currentTicket) {
+        if (currentTicket == null) {
+            System.out.println("No hay ticket");
+            return null;
         }
 
-        return t;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\nEstado actual: " + currentTicket.getStatus());
+        showMenu();
+        String option = sc.nextLine().trim();
+
+        switch (option) {
+            case "1":
+                currentTicket.setStatus(Status.EN_COLA);
+                bs.registerChange(currentTicket);
+                System.out.println("Estado cambiado a: EN_COLA");
+                break;
+
+            case "2":
+                currentTicket.setStatus(Status.EN_ATENCION);
+                bs.registerChange(currentTicket);
+                System.out.println("Estado cambiado a: EN_ATENCION");
+                break;
+
+            case "3":
+                currentTicket.setStatus(Status.EN_PROCESO);
+                bs.registerChange(currentTicket);
+                System.out.println("Estado cambiado a: EN_PROCESO");
+                break;
+
+            case "4":
+                currentTicket.setStatus(Status.PENDIENTE_DOCS);
+                bs.registerChange(currentTicket);
+                System.out.println("Estado cambiado a: PENDIENTE_DOCS");
+                break;
+
+            case "5":
+                currentTicket.setStatus(Status.COMPLETADO);
+                bs.registerChange(currentTicket);
+                System.out.println("Estado cambiado a: COMPLETADO");
+                break;
+
+            case "6":
+                System.out.println("Regresando al menú anterior...");
+                return currentTicket;
+
+            default:
+                System.out.println("Opción inválida. Ingrese un número entre 1 y 6.");
+                break;
+        }
+
+        return currentTicket;
     }
 }

@@ -19,7 +19,7 @@ public class UndoRedoManager {
         this.currentSize = 0;
     }
 
-// Metodo para agregar una accion a la pila de UNDO
+    // Metodo para agregar una accion a la pila de UNDO
     public void pushUndo(Ticket value) {
         if (value == null) {
             return;
@@ -38,7 +38,7 @@ public class UndoRedoManager {
         }
         currentSize++;
     }
-    
+
     // Metodo para eliminar el ultimo elemento agregado a la pila UNDO
     public Ticket popUndo() {
         if (isEmptyUndo()) {
@@ -120,5 +120,5 @@ public class UndoRedoManager {
     public void setRedo(Node<Ticket> redo) {
         this.redo = redo;
     }
-    
+
 }

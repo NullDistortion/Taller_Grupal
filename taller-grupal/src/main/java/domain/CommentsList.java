@@ -1,7 +1,8 @@
 package domain;
 
-import java.time.LocalDate;
 import theNODE.Node;
+
+import java.time.LocalDate;
 
 public class CommentsList {
 
@@ -69,6 +70,7 @@ public class CommentsList {
     }
 
     // --- METODOS (BASADOS EN POSICION) ---
+
     /**
      * Borra un comentario basado en su posición visible (1, 2, 3...).
      */
@@ -80,7 +82,7 @@ public class CommentsList {
         // Borra por ID
         return deleteComment(idToDelete);
     }
-    
+
     /**
      * Actualiza un comentario basado en su posición visible (1, 2, 3...).
      */
@@ -92,9 +94,10 @@ public class CommentsList {
         // Actualiza por ID
         return updateComment(idToUpdate, newDescription);
     }
-    
+
     /**
      * Busca el ID del comentario que está en la posición N de la lista.
+     *
      * @param position (posision del comentario que se desea eliminar)
      * @return el ID del comentario, o -1 si la posición no es válida.
      */
@@ -104,7 +107,7 @@ public class CommentsList {
         }
         Node<Comments> current = head;
         int currentPosition = 1;
-        
+
         while (current != null) {
             if (currentPosition == position) {
                 return current.getData().getId();
@@ -166,7 +169,7 @@ public class CommentsList {
         return length;
     }
 
-   @Override
+    @Override
     public String toString() {
         if (isEmpty()) {
             return "[Sin Comentarios]";
@@ -177,10 +180,10 @@ public class CommentsList {
 
         while (current != null) {
             sb.append("   ")
-              .append(position) // <-- Imprime la POSICIÓN (1.)
-              .append(". ")
-              .append(current.getData().toString()); // <-- Imprime el Comentario (Sin el ID porque no esta en el toString de comment)
-            
+                    .append(position) // <-- Imprime la POSICIÓN (1.)
+                    .append(". ")
+                    .append(current.getData().toString()); // <-- Imprime el Comentario (Sin el ID porque no esta en el toString de comment)
+
             if (current.getNext() != null) {
                 sb.append("\n"); // Salto de línea para el siguiente
             }

@@ -1,10 +1,6 @@
 package business;
 
-import domain.CommentsList;
-import domain.Person;
-import domain.PrioritizedTicketQueue;
-import domain.Queue;
-import domain.Ticket;
+import domain.*;
 import enums.Status;
 
 public class Business {
@@ -62,7 +58,7 @@ public class Business {
         System.out.println(ticketQueue.toString());
     }
 
-    public boolean addCommentToCurrentTicket(Ticket ticket, String commentDescription) throws IllegalArgumentException {
+    public void addCommentToCurrentTicket(Ticket ticket, String commentDescription) throws IllegalArgumentException {
 
         if (ticket == null) {
             throw new IllegalArgumentException("No hay ningún ticket en atención.");
@@ -75,19 +71,18 @@ public class Business {
             CommentsList list = person.getComments();
             list.addComment(commentDescription);
 
-            System.out.println("Comentario añadido."); 
-            return true;
+            System.out.println("Comentario añadido.");
 
         } catch (IllegalArgumentException e) {
-            this.discardLastUndo(); 
+            this.discardLastUndo();
             throw e;
         }
     }
 
-    public boolean deleteCommentFromCurrentTicket(Ticket ticket, int position) {
+    public void deleteCommentFromCurrentTicket(Ticket ticket, int position) {
         if (ticket == null) {
             System.out.println("No hay ningún ticket en atención.");
-            return false;
+            return;
         }
         this.registerChange(ticket);
 
@@ -100,7 +95,6 @@ public class Business {
                 this.discardLastUndo();
                 System.out.println("No se encontró un comentario en la posición " + position);
             }
-            return success;
         } catch (Exception e) {
             this.discardLastUndo();
             throw e;
@@ -108,10 +102,10 @@ public class Business {
     }
 
     //Actualiza un comentario del ticket que está en atención.
-    public boolean updateCommentOnCurrentTicket(int position, String newDesc, Ticket ticket) {
+    public void updateCommentOnCurrentTicket(int position, String newDesc, Ticket ticket) {
         if (ticket == null) {
             System.out.println("No hay ningún ticket en atención.");
-            return false;
+            return;
         }
 
         this.registerChange(ticket);
@@ -124,7 +118,6 @@ public class Business {
                 this.discardLastUndo();
                 System.out.println("No se encontró un comentario en la posición " + position);
             }
-            return success;
         } catch (Exception e) {
             this.discardLastUndo();
             throw e;
@@ -143,9 +136,8 @@ public class Business {
         }
     }
 
-    public boolean validateInput(String name, String lastname, String identityCard, String telephone) {
-        if (name.trim().isEmpty() || lastname.trim().isEmpty() || identityCard.trim().isEmpty()
-                || telephone.trim().isEmpty()) {
+    public boolean validateInput(String name, String lastname) {
+        if (name.trim().isEmpty() || lastname.trim().isEmpty()) {
             System.out.println("No se pudo crear el ticket, datos no validos");
             return false;
         }
@@ -154,12 +146,15 @@ public class Business {
             System.out.println("El nombre y apellido solo deben contener letras");
             return false;
         }
-
-        if (!identityCard.matches("\\d+") || !telephone.matches("\\d+")) {
-            System.out.println("El ID y el telefono solo deben contener numeros");
-            return false;
-        }
         return true;
     }
 
+
+    public void generateTickets() {
+        //TODO metodo vacio
+    }
+
+    public void printTicketHistory() {
+        //TODO conencta Bussines con FileManger para usar el archivo
+    }
 }

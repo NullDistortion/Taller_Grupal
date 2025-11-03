@@ -2,12 +2,7 @@ package business;
 
 import domain.Ticket;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Gestiona la escritura y lectura de un archivo de historial de tickets.
@@ -47,7 +42,7 @@ public class FileManager {
         // Usar try-with-resources asegura que el archivo se cierre automáticamente.
         // El 'true' en FileWriter es para modo "append" (añadir al final).
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(historyFile, true))) {
-            
+
             String line = ticket.toString(); // Obtiene la representación en una sola línea.
             bw.write(line);                  // Escribe la línea.
             bw.newLine();                    // Añade un salto de línea.

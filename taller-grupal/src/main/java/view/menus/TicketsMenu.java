@@ -2,83 +2,65 @@ package view.menus;
 
 import java.util.Scanner;
 import business.Business;
-import business.FileManager;
 import domain.Ticket;
 import view.Menu;
-import view.menus.*;
 
 public class TicketsMenu implements Menu {
 
     @Override
     public void showMenu() {
-        System.out.println("Escoga la accion que desee realizar");
-        System.out.println("===================================");
-        System.out.println("0. Mostrar Ticket");
-        System.out.println("1. Opciones de Comentarios");
-        System.out.println("2. Cambiar estado");
-        System.out.println("3. Revertir cambios");
-        System.out.println("4. Rehacer cambios");
-        System.out.println("5. Finalizar Atencion de Ticket actual");
-        System.out.println("===================================");
-        System.out.print("Ingrese una opcion: ");
+        System.out.println("\n=== MENÚ TICKET ===");
+        System.out.println("1. Mostrar comentarios");
+        System.out.println("2. Agregar / editar / eliminar comentarios");
+        System.out.println("3. Cambiar estado");
+        System.out.println("4. Deshacer cambio");
+        System.out.println("5. Rehacer cambio");
+        System.out.println("6. Finalizar atención");
+        System.out.print("Seleccione una opción: ");
     }
 
     @Override
-    public Ticket handleInput(Scanner sc, Business bs, FileManager fm, Ticket t) {
-        boolean secondFlagTicket = true;
-
-        while (secondFlagTicket) {
-            showMenu();
-            String opt = sc.nextLine();
-
-            switch (opt) {
-                case "0": // Mostrar ticket
-                    System.out.println("Ticket Actual");
-                    if (t != null) System.out.println(t.toString());
-                    else System.out.println("No hay ticket activo.");
-                    break;
-
-                case "1": // Comentarios
-                    ComentMenu comentMenu = new ComentMenu();
-                    t = comentMenu.handleInput(sc, bs, fm, t);
-                    break;
-
-                case "2": // Cambiar estado
-                    StatusMenu statusMenu = new StatusMenu();
-                    t = statusMenu.handleInput(sc, bs, fm, t);
-                    break;
-
-                case "3": // Revertir cambio
-                    Ticket beforeChange = bs.undoChanges(t);
-                    if (beforeChange != null) {
-                        t = beforeChange;
-                        System.out.println("Cambio revertido.");
-                    } else {
-                        System.out.println("No hay mas cambios que revertir.");
-                    }
-                    break;
-
-                case "4": // Rehacer cambio
-                    Ticket afterChange = bs.redoChanges(t);
-                    if (afterChange != null) {
-                        t = afterChange;
-                        System.out.println("Cambio rehecho.");
-                    } else {
-                        System.out.println("No hay más cambios que rehacer.");
-                    }
-                    break;
-
-                case "5": // Finalizar atencion
-                    fm.logTicketState(t);
-                    secondFlagTicket = false;
-                    break;
-
-                default:
-                    System.out.println("Opcion no valida");
-                    break;
-            }
+    public Ticket handleInput(Business bs, Ticket currentTicket) {
+        if (currentTicket == null) {
+            System.out.println("No hay ticket");
+            return null;
         }
 
-        return t;
+        Scanner sc = new Scanner(System.in);
+        showMenu();
+        String option = sc.nextLine();
+
+        switch (option) {
+            case "1":
+                bs.printCommentsOfCurrentTicket(currentTicket);
+                break;
+
+            case "2":
+                currentTicket = new ComentMenu().handleInput(bs, currentTicket);
+                break;
+
+            case "3":
+                currentTicket = new StatusMenu().handleInput(bs, currentTicket);
+                break;
+
+            case "4":
+                Ticket undo = bs.undoChanges(currentTicket);
+                if (undo != null) currentTicket = undo;
+                break;
+
+            case "5":
+                Ticket redo = bs.redoChanges(currentTicket);
+                if (redo != null) currentTicket = redo;
+                break;
+
+            case "6":
+                System.out.println("Finalizando atención de: " + currentTicket.getPerson().getName());
+                return null;
+
+            default:
+                System.out.println("Opción inválida.");
+        }
+
+        return currentTicket;
     }
 }

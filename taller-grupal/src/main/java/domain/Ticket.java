@@ -8,19 +8,20 @@ public class Ticket {
     private Type type;
     private Status status;
     private boolean priority; //TODO Setear logica de inicio, valor por defecto ahora false
+    //TODO agregar ID par aubicacion
 
-    public Ticket(Person person, Type type, Status status,boolean priority) {
+    public Ticket(Person person, Type type, Status status, boolean priority) {
         this.person = person;
         this.type = type;
         this.status = status;
-        this.priority=priority;
+        this.priority = priority;
     }
-    
+
     public Ticket(Ticket other) {
-    this.person = new Person(other.person);
-    this.type = other.type;     
-    this.status = other.status; 
-}
+        this.person = new Person(other.person);
+        this.type = other.type;
+        this.status = other.status;
+    }
 
     public Person getPerson() {
         return person;
@@ -53,12 +54,14 @@ public class Ticket {
     public void setPriority(boolean priority) {
         this.priority = priority;
     }
-    
+
     @Override
     public String toString() {
-        // Ejemplo: "[Persona: Juan Pérez (11223344) | Tipo: MATRICULA | Estado: EN_ATENCION]"
-        return "[Persona: " + person.toString() + 
-               " | Tipo: " + type + 
-               " | Estado: " + status + "]";
+        // Ejemplo: "[Persona: Juan Pérez (11223344)
+        // | Tipo: MATRICULA
+        // | Estado: EN_ATENCION]"
+        return "[Persona: " + person.toString() +
+                " | Tipo: " + type +
+                " | Estado: " + status + "]";
     }
 }

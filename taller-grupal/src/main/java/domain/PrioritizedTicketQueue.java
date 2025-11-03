@@ -1,10 +1,7 @@
 package domain;
 
-import domain.Ticket;
-
-
 public class PrioritizedTicketQueue implements Queue<Ticket> {
-    
+
     // Usa dos colas comunes internamente
     private Queue<Ticket> priorityQueue = new LinkedListQueue<>();
     private Queue<Ticket> commonQueue = new LinkedListQueue<>();
@@ -12,7 +9,7 @@ public class PrioritizedTicketQueue implements Queue<Ticket> {
     @Override
     public void enqueue(Ticket ticket) {
         if (ticket == null) return;
-        
+
         if (ticket.isPriority()) {
             priorityQueue.enqueue(ticket); // Delega a la cola de prioridad
         } else {
@@ -47,11 +44,11 @@ public class PrioritizedTicketQueue implements Queue<Ticket> {
     public int size() {
         return priorityQueue.size() + commonQueue.size();
     }
-    
+
     @Override
     public String toString() {
         // Podrías combinar las dos cadenas de texto
-        return "Prioridad: " + priorityQueue.toString() + 
-               "\nComún: " + commonQueue.toString();
+        return "Prioridad: " + priorityQueue.toString() +
+                "\nComún: " + commonQueue.toString();
     }
 }
