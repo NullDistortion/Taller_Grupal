@@ -47,15 +47,20 @@ public class LinkedListQueue<T> implements Queue<T> {
 
     @Override
     public String toString() {
-        if (isEmpty()) return "La cola está vacía.";
-        StringBuilder sb = new StringBuilder("[");
+        if (isEmpty()) return "No hay tickets en esta cola.\n";
+
+        StringBuilder sb = new StringBuilder();
         Node<T> current = head;
+        int index = 1;
+
         while (current != null) {
-            sb.append(current.getData().toString());
-            if (current.getNext() != null) sb.append(" <- ");
+            sb.append(index++)
+                    .append(") ")
+                    .append(current.getData().toString()) // usa el toString() del Ticket
+                    .append("\n--------------------------------------\n");
             current = current.getNext();
         }
-        sb.append("]");
+
         return sb.toString();
     }
 }

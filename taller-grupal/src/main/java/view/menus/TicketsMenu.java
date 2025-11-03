@@ -21,9 +21,9 @@ public class TicketsMenu implements Menu {
 
     @Override
     public Ticket handleInput(Business bs, Ticket currentTicket) {
-        if (currentTicket == null) {
-            System.out.println("No hay ticket");
-            return null;
+
+        if (!bs.valedateExistence(currentTicket)) {
+            return currentTicket;
         }
 
         Scanner sc = new Scanner(System.in);

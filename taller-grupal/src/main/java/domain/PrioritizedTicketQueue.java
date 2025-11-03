@@ -47,8 +47,7 @@ public class PrioritizedTicketQueue implements Queue<Ticket> {
 
     @Override
     public String toString() {
-        // Podrías combinar las dos cadenas de texto
-        return "Prioridad: " + priorityQueue.toString() +
-                "\nComún: " + commonQueue.toString();
+        return "Prioridad: \n" + priorityQueue.toString() + "\n" +
+                "\nComún: \n" + commonQueue.toString();
     }
 }

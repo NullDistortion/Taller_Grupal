@@ -7,8 +7,8 @@ public class Ticket {
     private Person person;
     private Type type;
     private Status status;
-    private boolean priority; //TODO Setear logica de inicio, valor por defecto ahora false
-    //TODO agregar ID par aubicacion
+    private boolean priority;
+    //TODO agregar ID par aubicacion en csv
 
     public Ticket(Person person, Type type, Status status, boolean priority) {
         this.person = person;
@@ -57,11 +57,9 @@ public class Ticket {
 
     @Override
     public String toString() {
-        // Ejemplo: "[Persona: Juan Pérez (11223344)
-        // | Tipo: MATRICULA
-        // | Estado: EN_ATENCION]"
-        return "[Persona: " + person.toString() +
-                " | Tipo: " + type +
-                " | Estado: " + status + "]";
+        return "\nPersona: " + person.getName() + " " + person.getLastName() +
+                "\nTipo: " + type +
+                "\nEstado: " + status +
+                "\nPrioridad: " + (priority ? "Sí" : "No");
     }
 }

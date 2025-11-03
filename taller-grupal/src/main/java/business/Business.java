@@ -2,6 +2,9 @@ package business;
 
 import domain.*;
 import enums.Status;
+import enums.Type;
+
+import java.util.Scanner;
 
 public class Business {
 
@@ -66,7 +69,7 @@ public class Business {
 
         this.registerChange(ticket);
         try {
-            //    Business -> pide Ticket -> pide Person -> pide CommentsList -> ejecuta .add()
+            //Business -> pide Ticket -> pide Person -> pide CommentsList -> ejecuta .add()
             Person person = ticket.getPerson();
             CommentsList list = person.getComments();
             list.addComment(commentDescription);
@@ -147,6 +150,99 @@ public class Business {
             return false;
         }
         return true;
+    }
+
+    public boolean valedateExistence(Ticket currentTicket) {
+        if (currentTicket == null) {
+            System.out.println("No hay ticket");
+            return false;
+        }
+        return true;
+    }
+
+    public void createManualTicket() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("\n=== CREAR NUEVO TICKET ===");
+
+        Person person = requestPersonData(sc);
+        if (person == null) return;
+
+        boolean priority = validatePrio(sc);
+        Type type = selectType(sc);
+
+        Ticket newTicket = new Ticket(person, type, Status.EN_COLA, priority);
+        addToQueue(newTicket);
+
+        System.out.println("\nTicket agregado correctamente: \n" + newTicket);
+    }
+
+
+    private Person requestPersonData(Scanner sc) {
+        System.out.print("Nombre: ");
+        String name = sc.nextLine().trim();
+        System.out.print("Apellido: ");
+        String lastName = sc.nextLine().trim();
+
+        if (!validateInput(name, lastName)) {
+            return null;
+        }
+
+        return new Person(name, lastName);
+    }
+
+    private boolean validatePrio(Scanner sc) {
+        boolean priority = false;
+        boolean valid = false;
+
+        while (!valid) {
+            System.out.print("¿Es prioridad? (s/n): ");
+            String answer = sc.nextLine().trim().toLowerCase();
+
+            switch (answer) {
+                case "s":
+                    priority = true;
+                    valid = true;
+                    break;
+                case "n":
+                    valid = true;
+                    break;
+                default:
+                    System.out.println("Ingrese un parámetro válido (s/n).");
+                    break;
+            }
+        }
+
+        return priority;
+    }
+
+    private Type selectType(Scanner sc) {
+        Type type = null;
+
+        while (type == null) {
+            System.out.println("\nSeleccione el tipo de trámite:");
+            System.out.println("1. MATRICULA");
+            System.out.println("2. HOMOLOGACION");
+            System.out.println("3. CONTANCIA_CERTIFICADOS");
+            System.out.print("Opción: ");
+            String option = sc.nextLine().trim();
+
+            switch (option) {
+                case "1":
+                    type = Type.MATRICULA;
+                    break;
+                case "2":
+                    type = Type.HOMOLOGACION;
+                    break;
+                case "3":
+                    type = Type.CONTANCIA_CERTIFICADOS;
+                    break;
+                default:
+                    System.out.println("Opción inválida. Intente nuevamente.");
+                    break;
+            }
+        }
+        return type;
     }
 
 
