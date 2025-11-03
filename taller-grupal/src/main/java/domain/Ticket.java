@@ -62,5 +62,4 @@ public class Ticket {
                 "\nEstado: " + status +
                 "\nPrioridad: " + (priority ? "Sí" : "No");
     }
-    
 }
