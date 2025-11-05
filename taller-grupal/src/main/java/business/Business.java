@@ -290,5 +290,35 @@ public class Business {
     public void showFinalizedHistory() {
         fileManager.printFinalizedTickets(attendedTickets);
     }
+    
+    public void exportFinalizedTicketsToJSON() {
+    if (attendedTickets == null || attendedTickets.isEmpty()) {
+        System.out.println("No hay tickets finalizados para exportar.");
+        return;
+    }
+    fileManager.exportFinalizedTicketsToJSON(attendedTickets);
+}
+public void importFinalizedTicketsFromJSON() {
+    Queue<Ticket> imported = fileManager.importFinalizedTicketsFromJSON();
+    if (imported.isEmpty()) {
+        System.out.println("No se encontraron tickets finalizados en el archivo JSON.");
+        return;
+    }
+
+    while (!imported.isEmpty()) {
+        Ticket t = imported.dequeue();
+        attendedTickets.enqueue(t);
+    }
+
+    System.out.println("Tickets finalizados cargados en memoria.");
+}
+public void printFinalizedTickets() {
+    if (attendedTickets == null || attendedTickets.isEmpty()) {
+        System.out.println("No hay tickets finalizados para mostrar.");
+        return;
+    }
+    fileManager.printFinalizedTickets(attendedTickets);
+}
+
 
 }

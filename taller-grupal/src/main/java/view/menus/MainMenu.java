@@ -11,7 +11,7 @@ public class MainMenu implements Menu {
 
     @Override
     public void showMenu() {
-        System.out.println("== MENÚ PRINCIPAL ==");
+        System.out.println("== MENU PRINCIPAL ==");
         System.out.println("1. Atender Siguiente Ticket en cola");
         System.out.println("2. Mostrar tickets en cola");
         System.out.println("3. Crear Nuevo Ticket");
@@ -49,7 +49,8 @@ public class MainMenu implements Menu {
                 break;
 
             case "4": // VER HISTORIAL
-                bs.showFinalizedHistory();// Esto no afecta a currentTicket
+                bs.importFinalizedTicketsFromJSON();// Esto no afecta a currentTicket
+                bs.printFinalizedTickets();
                 break;
 
             case "5": // (Opcional) VOLVER A TICKET ACTUAL
@@ -63,12 +64,13 @@ public class MainMenu implements Menu {
                 break;
 
             case "6": // GUARDAR Y SALIR
-                if (currentTicket != null) {
+                if (currentTicket == null) {
                     System.out.println("Guardando tickets pendientes en cola...");
                     bs.savePendingQueue(); // Tu nueva función de persistencia
 
                     System.out.println("Guardando historial de tickets finalizados...");
                     bs.exportFinalizedTickets();
+                    bs.exportFinalizedTicketsToJSON();
                     System.out.println("Saliendo del programa.");
 
                     System.exit(0);

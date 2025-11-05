@@ -169,7 +169,9 @@ public class CommentsList {
     public int size() {
         return length;
     }
-
+public Node<Comments> getHead() {
+    return head;
+}
     @Override
     public String toString() {
         if (isEmpty()) {

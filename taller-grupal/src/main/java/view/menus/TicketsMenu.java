@@ -60,8 +60,7 @@ public class TicketsMenu implements Menu {
                     break;
                 case "6":
                     bs.finalizeCurrentTicket();
-                    
-                    continuar = false;
+                    currentTicket=null;
                 case "0":
                     continuar = false;
                     break;
