@@ -15,120 +15,130 @@ import java.util.Scanner;
 public class Utility {
 
     public static Person requestPersonData(Scanner sc) {
+        // 1. Pedir Nombre
         String name = requestValidString(sc, "Nombre: ");
-        String lastName = requestValidString(sc, "Apellido: ");
-
-        if (!validateInput(name, lastName)) {
-            return null;
+        if (name == null) {
+            return null; // Cancelación propagada
         }
+
+        // 2. Pedir Apellido
+        String lastName = requestValidString(sc, "Apellido: ");
+        if (lastName == null) {
+            return null; // Cancelación propagada
+        }        
         return new Person(name, lastName);
     }
 
-    public static boolean validatePrio(Scanner sc) {
-        boolean priority = false;
-        boolean valid = false;
-
-        while (!valid) {
-            System.out.print("Es prioridad? (s/n): ");
+    public static Boolean validatePrio(Scanner sc) { // ¡Cambiado a Boolean!
+        while (true) {
+            System.out.print("¿Es prioridad? (s/n) (o 'q' para cancelar): ");
             String answer = sc.nextLine().trim().toLowerCase();
 
             switch (answer) {
                 case "s":
-                    priority = true;
-                    valid = true;
-                    break;
+                    return true; // Éxito
                 case "n":
-                    valid = true;
-                    break;
+                    return false; // Éxito
+                case "q":
+                    return null; // Cancelación
                 default:
-                    System.out.println("Ingrese un parametro valido (s/n).");
+                    System.out.println("Ingrese un parametro valido (s/n/q).");
                     break;
             }
         }
-        return priority;
     }
 
     public static Type selectType(Scanner sc) {
-        Type type = null;
-
-        while (type == null) {
+        while (true) {
             System.out.println("\nSeleccione el tipo de tramite:");
             System.out.println("1. MATRICULA");
             System.out.println("2. HOMOLOGACION");
             System.out.println("3. CONTANCIA_CERTIFICADOS");
-            System.out.print("Opcion: ");
+            System.out.print("Opcion (o 'q' para cancelar): ");
             String option = sc.nextLine().trim();
 
             switch (option) {
                 case "1":
-                    type = Type.MATRICULA;
-                    break;
+                    return Type.MATRICULA;
                 case "2":
-                    type = Type.HOMOLOGACION;
-                    break;
+                    return Type.HOMOLOGACION;
                 case "3":
-                    type = Type.CONTANCIA_CERTIFICADOS;
-                    break;
+                    return Type.CONTANCIA_CERTIFICADOS;
+                case "q":
+                case "Q":
+                    return null; // Cancelación
                 default:
                     System.out.println("Opcion invalida. Intente nuevamente.");
                     break;
             }
         }
-        return type;
     }
 
-    public static String requestValidString(Scanner sc, String promptMessage) {
+   public static String requestValidString(Scanner sc, String promptMessage) {
         String input;
-        do {
+        while (true) {
             System.out.print(promptMessage);
             input = sc.nextLine().trim();
 
+            // 1. Revisar si es 'q' para cancelar
+            if (input.equalsIgnoreCase("q")) {
+                return null;
+            }
+
+            // 2. Validaciones existentes
             if (input.isEmpty()) {
                 System.out.println("El texto no puede estar vacío.");
             } else if (input.contains(" ")) {
                 System.out.println("No se permiten espacios internos.");
             } else if (!input.matches("[a-zA-Z]+")) {
                 System.out.println("Solo se permiten letras.");
+            } else {
+                // Si pasa todas las validaciones, se retorna el input
+                return input;
             }
-
-        } while (input.isEmpty() || input.contains(" ") || !input.matches("[a-zA-Z]+"));
-
-        return input;
+            
+            System.out.println("Intente de nuevo, o ingrese 'q' para cancelar.");
+        }
     }
 
-    public static int requestValidInteger(Scanner sc, String prompt) {
-        int number = -1;
-        boolean valid = false;
-
-        while (!valid) {
-            System.out.print(prompt);
+    public static Integer requestValidInteger(Scanner sc, String prompt) { // ¡Cambiado a Integer!
+        while (true) {
+            System.out.print(prompt + " (o 'q' para cancelar): ");
             String input = sc.nextLine().trim();
+
+            if (input.equalsIgnoreCase("q")) {
+                return null; // Cancelación
+            }
+
             try {
-                number = Integer.parseInt(input);
+                int number = Integer.parseInt(input);
                 if (number <= 0) {
                     System.out.println("Debe ingresar un número mayor que cero.");
                 } else {
-                    valid = true;
+                    return number; // Éxito
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Entrada no válida. Debe ingresar un número entero.");
             }
         }
-
-        return number;
     }
 
     public static String requestNonEmptyString(Scanner sc, String prompt) {
         String input;
-        do {
-            System.out.print(prompt);
+        while (true) {
+            System.out.print(prompt + " (o 'q' para cancelar): ");
             input = sc.nextLine().trim();
+
+            if (input.equalsIgnoreCase("q")) {
+                return null; // Cancelación
+            }
+            
             if (input.isEmpty()) {
                 System.out.println("La descripción no puede estar vacía.");
+            } else {
+                return input; // Éxito
             }
-        } while (input.isEmpty());
-
-        return input;
+        }
     }
 
     public static boolean validateInput(String name, String lastname) {
