@@ -31,14 +31,16 @@ public class TicketsMenu implements Menu {
         boolean continuar = true;
 
         while (continuar) {
+            bs.printCurrentTicket();
             showMenu();
             String option = sc.nextLine().trim();
 
             switch (option) {
                 case "1":
-                    System.out.print("Ingrese comentario: ");
+                    
                     bs.printCommentsOfCurrentTicket();
                     break;
+                    
                 case "2":
                     currentTicket = new CommentMenu().handleInput(bs, currentTicket);
                     break;
@@ -46,6 +48,12 @@ public class TicketsMenu implements Menu {
                     currentTicket = new StatusMenu().handleInput(bs, currentTicket);
                     if (currentTicket.getStatus() == Status.PENDIENTE_DOCS) {
                         bs.returnToQueueIfPendingDocuments();
+                        currentTicket=null;
+                        continuar = false;
+                        break;
+                    }
+                     if (currentTicket.getStatus() == Status.COMPLETADO) {
+                        bs.finalizeCurrentTicket();
                         currentTicket=null;
                         continuar = false;
                     }

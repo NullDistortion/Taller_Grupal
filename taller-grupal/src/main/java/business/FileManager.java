@@ -154,6 +154,29 @@ public class FileManager {
         return importedQueue;
     }
 
+    public void printFinalizedTickets(Queue<Ticket> queue) {
+        if (queue == null || queue.isEmpty()) {
+            System.out.println("No hay tickets finalizados para mostrar.");
+            return;
+        }
+
+        Queue<Ticket> copy = copyQueue(queue);
+        System.out.println("\n=== HISTORIAL DE TICKETS FINALIZADOS ===");
+
+        while (!copy.isEmpty()) {
+            Ticket t = copy.dequeue();
+            if (t.getStatus() == Status.COMPLETADO) {
+                System.out.println("ID: " + t.getId());
+                System.out.println("Nombre: " + t.getPerson().getName() + " " + t.getPerson().getLastName());
+                System.out.println("Tipo: " + t.getType());
+                System.out.println("Estado: " + t.getStatus());
+                System.out.println("Prioridad: " + (t.isPriority() ? "Sí" : "No"));
+                System.out.println("Comentarios: " + t.getPerson().getComments().toString());
+                System.out.println("--------------------------------------");
+            }
+        }
+    }
+    
 public void exportFinalizedTicketsToJSON(Queue<Ticket> queue) {
         if (queue == null || queue.isEmpty()) {
             System.out.println("No hay tickets finalizados para exportar a JSON.");
@@ -178,12 +201,19 @@ public void exportFinalizedTicketsToJSON(Queue<Ticket> queue) {
 
         // 2. Copiar la cola para no modificar la original
         Queue<Ticket> copy = copyQueue(queue);
+        int addedCount = 0; // Contador para logs
 
-        // 3. Añadir los nuevos tickets al JSONArray
+        // 3. Añadir los nuevos tickets al JSONArray (CON VERIFICACIÓN)
         while (!copy.isEmpty()) {
             Ticket t = copy.dequeue();
             if (t.getStatus() != Status.COMPLETADO) {
                 continue; // Solo exportar completados
+            }
+
+            // --- INICIO DE LA CORRECCIÓN ---
+            if (ticketExistsInJSON(mainArray, t.getId())) {
+                // Si ya existe, simplemente sáltalo
+                continue; 
             }
 
             // Crear el objeto de ticket principal
@@ -200,31 +230,37 @@ public void exportFinalizedTicketsToJSON(Queue<Ticket> queue) {
 
             // Crear el array de comentarios anidado
             JSONArray commentsJson = new JSONArray();
-            
-            Node<Comments> currentCommentNode = t.getPerson().getComments().getHead(); // ¡Debes implementar getHead() en CommentsList!
+
+            Node<Comments> currentCommentNode = t.getPerson().getComments().getHead();
             while (currentCommentNode != null) {
                 Comments comment = currentCommentNode.getData();
                 JSONObject commentJson = new JSONObject();
-                commentJson.put("date", comment.getDate()
-.toString()); // Asumido
-                commentJson.put("description", comment.getDescription()); // Asumido
+                // Asumo que tu clase Comments tiene un método getDate()
+                commentJson.put("date", comment.getDate().toString()); 
+                commentJson.put("description", comment.getDescription());
                 commentsJson.add(commentJson);
                 currentCommentNode = currentCommentNode.getNext();
             }
-            
+
             personJson.put("comments", commentsJson);
             ticketJson.put("person", personJson);
 
-            // Añadir el ticket al array principal
+            // Añadir el ticket (ahora verificado) al array principal
             mainArray.add(ticketJson);
+            addedCount++; // Contar el ticket añadido
         }
 
         // 4. Escribir el array actualizado de vuelta al archivo
-        try (FileWriter writer = new FileWriter(jsonFile, false)) { // false = sobrescribir
-            writer.write(mainArray.toJSONString());
-            System.out.println("Tickets finalizados exportados a: " + jsonFile.getPath());
-        } catch (IOException e) {
-            System.out.println("Error al exportar tickets a JSON: " + e.getMessage());
+        // Solo escribimos en el archivo si realmente añadimos algo nuevo.
+        if (addedCount > 0) {
+            try (FileWriter writer = new FileWriter(jsonFile, false)) { // false = sobrescribir
+                writer.write(mainArray.toJSONString());
+                System.out.println(addedCount + " tickets finalizados nuevos exportados a: " + jsonFile.getPath());
+            } catch (IOException e) {
+                System.out.println("Error al exportar tickets a JSON: " + e.getMessage());
+            }
+        } else {
+            System.out.println("No hay tickets nuevos para añadir a JSON.");
         }
     }
 
@@ -280,5 +316,17 @@ public Queue<Ticket> importFinalizedTicketsFromJSON() {
         }
 
         return imported;
+    }
+private boolean ticketExistsInJSON(JSONArray array, int id) {
+        // Itera sobre los objetos JSON en el array
+        for (Object obj : array) {
+            JSONObject ticketJson = (JSONObject) obj;
+            // JSON-simple parsea números como Long, por eso la conversión
+            int existingId = ((Long) ticketJson.get("id")).intValue();
+            if (existingId == id) {
+                return true; // ¡Encontrado!
+            }
+        }
+        return false; // No existe
     }
 }

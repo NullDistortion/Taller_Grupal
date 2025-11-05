@@ -271,6 +271,13 @@ public class Business {
         }
     }
 
+    public void showFinalizedHistory() {
+        fileManager.printFinalizedTickets(attendedTickets);
+    }
+    
+    public void printCurrentTicket() {
+        System.out.println(currentTicket.toString());
+    }
     
     public void exportFinalizedTicketsToJSON() {
     if (attendedTickets == null || attendedTickets.isEmpty()) {
@@ -293,5 +300,13 @@ public void importFinalizedTicketsFromJSON() {
 
     System.out.println("Tickets finalizados cargados en memoria.");
 }
+public void printFinalizedTickets() {
+    if (attendedTickets == null || attendedTickets.isEmpty()) {
+        System.out.println("No hay tickets finalizados para mostrar.");
+        return;
+    }
+    fileManager.printFinalizedTickets(attendedTickets);
+}
+
 
 }

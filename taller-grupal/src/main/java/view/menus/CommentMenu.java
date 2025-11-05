@@ -25,6 +25,7 @@ public class CommentMenu implements Menu {
         }
 
         Scanner sc = new Scanner(System.in);
+        bs.printCommentsOfCurrentTicket();
         showMenu();
         String option = Utility.requestNonEmptyString(sc, "Seleccione una opcion: ");
 

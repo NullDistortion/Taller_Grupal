@@ -49,12 +49,13 @@ public class MainMenu implements Menu {
                 break;
 
             case "4": // VER HISTORIAL
-                bs.importFinalizedTicketsFromJSON();// Esto no afecta a currentTicket
+                bs.importFinalizedTicketsFromJSON();
+                bs.showFinalizedHistory();
                 break;
 
             case "5": // (Opcional) VOLVER A TICKET ACTUAL
                 if (currentTicket == null) {
-                    System.out.println("No hay ningún ticket en atención.");
+                    System.out.println("No hay ticket siendo atendido.");
                 } else {
                     System.out.println("Volviendo al ticket (ID: " + currentTicket.getId() + ").");
                     // Volvemos a entrar al menú de ticket
@@ -78,7 +79,7 @@ public class MainMenu implements Menu {
                 break;
 
             default:
-                System.out.println("Opción inválida.");
+                System.out.println("Opcion invalida.");
         }
 
         // Devolvemos el estado de currentTicket (haya cambiado o no) a RunApp
