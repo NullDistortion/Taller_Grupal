@@ -35,31 +35,31 @@ public class StatusMenu implements Menu {
         switch (option) {
             case "1":
                 currentTicket.setStatus(Status.EN_COLA);
-                bs.registerChange(currentTicket);
+                bs.registerChange();
                 System.out.println("Estado cambiado a: EN_COLA");
                 break;
 
             case "2":
                 currentTicket.setStatus(Status.EN_ATENCION);
-                bs.registerChange(currentTicket);
+                bs.registerChange();
                 System.out.println("Estado cambiado a: EN_ATENCION");
                 break;
 
             case "3":
                 currentTicket.setStatus(Status.EN_PROCESO);
-                bs.registerChange(currentTicket);
+                bs.registerChange();
                 System.out.println("Estado cambiado a: EN_PROCESO");
                 break;
 
             case "4":
                 currentTicket.setStatus(Status.PENDIENTE_DOCS);
-                bs.registerChange(currentTicket);
+                bs.registerChange();
                 System.out.println("Estado cambiado a: PENDIENTE_DOCS");
                 break;
 
             case "5":
                 currentTicket.setStatus(Status.COMPLETADO);
-                bs.registerChange(currentTicket);
+                bs.registerChange();
                 bs.addAttendedTicket(currentTicket);
                 System.out.println("Estado cambiado a: COMPLETADO");
                 break;

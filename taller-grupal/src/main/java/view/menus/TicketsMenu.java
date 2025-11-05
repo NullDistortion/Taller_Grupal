@@ -59,12 +59,10 @@ public class TicketsMenu implements Menu {
                     }
                     break;
                 case "4":
-                    currentTicket = bs.undoChanges(currentTicket);
-                    System.out.println("Cambio deshecho.");
+                    currentTicket = bs.undoChanges();
                     break;
                 case "5":
-                    currentTicket = bs.redoChanges(currentTicket);
-                    System.out.println("Cambio rehecho.");
+                    currentTicket = bs.redoChanges();
                     break;
                 case "6":
                     bs.finalizeCurrentTicket();

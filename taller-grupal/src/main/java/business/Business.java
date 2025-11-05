@@ -40,7 +40,7 @@ public class Business {
         }
 
         changesHistorial = new UndoRedoManager();
-        registerChange(new Ticket(ticket));
+        registerChange();
         ticket.setStatus(Status.EN_ATENCION);
         currentTicket = ticket;
 
@@ -63,26 +63,43 @@ public class Business {
         currentTicket = null;
     }
 
-    public void registerChange(Ticket ticket) {
-        changesHistorial.pushUndo(new Ticket(ticket));
+    public void registerChange() {
+        changesHistorial.pushUndo(new Ticket(currentTicket));
         changesHistorial.clearRedo();
     }
 
-    public Ticket undoChanges(Ticket actualTicket) {
-        if (changesHistorial.isEmptyUndo()) {
-            return null;
-        }
-        changesHistorial.pushRedo(new Ticket(actualTicket));
-        return changesHistorial.popUndo();
+    public Ticket undoChanges() {
+    if (changesHistorial.isEmptyUndo()) {
+        System.out.println("No hay nada que deshacer.");
+        return this.currentTicket; 
     }
+    
+    // Guarda el estado actual (que se va a deshacer) en la pila Redo
+    changesHistorial.pushRedo(new Ticket(this.currentTicket));
+    
+    // Actualiza el estado interno de la clase
+    this.currentTicket = changesHistorial.popUndo(); 
+    
+    // Devuelve el ticket actualizado (el estado deshecho)
+    return this.currentTicket;
+}
 
-    public Ticket redoChanges(Ticket actualTicket) {
-        if (changesHistorial.isEmptyRedo()) {
-            return null;
-        }
-        changesHistorial.pushUndo(new Ticket(actualTicket));
-        return changesHistorial.popRedo();
+    public Ticket redoChanges() {
+    if (changesHistorial.isEmptyRedo()) {
+        System.out.println("No hay nada que rehacer.");
+        // Devuelve el ticket actual si no hay nada que rehacer
+        return this.currentTicket;
     }
+    
+    // Guarda el estado actual (el estado deshecho) en la pila Undo
+    changesHistorial.pushUndo(new Ticket(this.currentTicket));
+    
+    // Actualiza el estado interno de la clase
+    this.currentTicket = changesHistorial.popRedo(); 
+    
+    // Devuelve el ticket actualizado (el estado rehecho)
+    return this.currentTicket;
+}
 
     public void discardLastUndo() {
         changesHistorial.popUndo();
@@ -97,7 +114,7 @@ public class Business {
             throw new IllegalArgumentException("No hay ningun ticket en atencion.");
         }
 
-        this.registerChange(currentTicket);
+        this.registerChange();
         try {
             Person person = currentTicket.getPerson();
             CommentsList list = person.getComments();
@@ -114,7 +131,7 @@ public class Business {
             System.out.println("No hay ningun ticket en atencion.");
             return;
         }
-        this.registerChange(currentTicket);
+        this.registerChange();
 
         try {
             Person person = currentTicket.getPerson();
@@ -124,6 +141,7 @@ public class Business {
                 this.discardLastUndo();
                 System.out.println("No se encontro un comentario en la posicion " + position);
             }
+            System.out.println("Comentario borrado exitosamente.");
         } catch (Exception e) {
             this.discardLastUndo();
             throw e;
@@ -136,7 +154,7 @@ public class Business {
             return;
         }
 
-        this.registerChange(currentTicket);
+        this.registerChange();
         try {
             Person person = currentTicket.getPerson();
             CommentsList list = person.getComments();
