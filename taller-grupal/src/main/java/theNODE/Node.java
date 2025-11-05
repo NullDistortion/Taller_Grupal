@@ -1,13 +1,15 @@
+
+
 package theNODE;
 
 /**
- * Clase Nodo genérico para estructuras de datos (SLL, Pila, Cola).
+ * Clase Nodo generico para estructuras de datos (SLL, Pila, Cola).
  * Permite almacenar cualquier tipo de data T.
  * Basada en la presentada en: https://www.it.uc3m.es/java/git-gisc-2013-14/units/pilas-colas/guides/2/guide_es_solution.html
  */
 public class Node<T> {
 
-    // Atributo privado para el data que almacenará el nodo
+    // Atributo privado para el data que almacenara el nodo
     private T data;
 
     // Atributo privado para la referencia al next nodo

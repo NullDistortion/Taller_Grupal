@@ -1,3 +1,4 @@
+
 package domain;
 
 public class PrioritizedTicketQueue implements Queue<Ticket> {
@@ -48,6 +49,15 @@ public class PrioritizedTicketQueue implements Queue<Ticket> {
     @Override
     public String toString() {
         return "Prioridad: \n" + priorityQueue.toString() + "\n" +
-                "\nComún: \n" + commonQueue.toString();
+                "\nComun: \n" + commonQueue.toString();
     }
+
+    public Queue<Ticket> getPriorityQueue() {
+        return priorityQueue;
+    }
+
+    public Queue<Ticket> getCommonQueue() {
+        return commonQueue;
+    }
+
 }

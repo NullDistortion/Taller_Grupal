@@ -108,7 +108,7 @@ public class UndoRedoManager {
         return this.redo == null;
     }
 
-    // Metodo para obtener el tamaño actual de la pila UNDO
+    // Metodo para obtener el tamano actual de la pila UNDO
     public int size() {
         return currentSize;
     }

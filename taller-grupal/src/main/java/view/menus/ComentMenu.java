@@ -10,17 +10,17 @@ public class ComentMenu implements Menu {
     @Override
     public void showMenu() {
         System.out.println("\n=== COMENTARIOS ===");
-        System.out.println("1. Añadir comentario");
+        System.out.println("1. Anadir comentario");
         System.out.println("2. Modificar comentario");
         System.out.println("3. Eliminar comentario");
         System.out.println("4. Regresar");
-        System.out.print("Seleccione una opción: ");
+        System.out.print("Seleccione una opcion: ");
     }
 
     @Override
     public Ticket handleInput(Business bs, Ticket currentTicket) {
 
-        if (!bs.valedateExistence(currentTicket)) {
+        if (!bs.validateExistence(currentTicket)) {
             return currentTicket;
         }
 
@@ -55,7 +55,7 @@ public class ComentMenu implements Menu {
                     return currentTicket;
 
                 default:
-                    System.out.println("Opción inválida.");
+                    System.out.println("Opcion invalida.");
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

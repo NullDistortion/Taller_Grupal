@@ -1,3 +1,4 @@
+
 package domain;
 
 import theNODE.Node;
@@ -49,7 +50,7 @@ public class CommentsList {
 
     public void addComment(String description) throws IllegalArgumentException {
         if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("No se puede añadir un comentario nulo o vacío.");
+            throw new IllegalArgumentException("No se puede anadir un comentario nulo o vacio.");
         }
 
         Comments newComment = new Comments(description, LocalDate.now());
@@ -72,38 +73,38 @@ public class CommentsList {
     // --- METODOS (BASADOS EN POSICION) ---
 
     /**
-     * Borra un comentario basado en su posición visible (1, 2, 3...).
+     * Borra un comentario basado en su posicion visible (1, 2, 3...).
      */
     public boolean deleteCommentByPosition(int position) {
-        int idToDelete = getIdAtPosition(position); // Traduce Posición -> ID
+        int idToDelete = getIdAtPosition(position); // Traduce Posicion -> ID
         if (idToDelete == -1) {
-            return false; // No se encontró esa posición
+            return false; // No se encontro esa posicion
         }
         // Borra por ID
         return deleteComment(idToDelete);
     }
 
     /**
-     * Actualiza un comentario basado en su posición visible (1, 2, 3...).
+     * Actualiza un comentario basado en su posicion visible (1, 2, 3...).
      */
     public boolean updateCommentByPosition(int position, String newDescription) {
-        int idToUpdate = getIdAtPosition(position); // Traduce Posición -> ID
+        int idToUpdate = getIdAtPosition(position); // Traduce Posicion -> ID
         if (idToUpdate == -1) {
-            return false; // No se encontró esa posición
+            return false; // No se encontro esa posicion
         }
         // Actualiza por ID
         return updateComment(idToUpdate, newDescription);
     }
 
     /**
-     * Busca el ID del comentario que está en la posición N de la lista.
+     * Busca el ID del comentario que esta en la posicion N de la lista.
      *
      * @param position (posision del comentario que se desea eliminar)
-     * @return el ID del comentario, o -1 si la posición no es válida.
+     * @return el ID del comentario, o -1 si la posicion no es valida.
      */
     private int getIdAtPosition(int position) {
         if (position < 1 || position > length || isEmpty()) {
-            return -1; // Posición inválida
+            return -1; // Posicion invalida
         }
         Node<Comments> current = head;
         int currentPosition = 1;
@@ -140,13 +141,13 @@ public class CommentsList {
             previous = current;
             current = current.getNext();
         }
-        return false; // No se encontró
+        return false; // No se encontro
     }
 
     //ES USADO INTERNAMENTE POR updateByPosition
     public boolean updateComment(int id, String newDescription) {
         if (newDescription == null || newDescription.trim().isEmpty()) {
-            System.out.println("Descripción vacía, no se puede actualizar");
+            System.out.println("Descripcion vacia, no se puede actualizar");
             return false;
         }
 
@@ -180,12 +181,12 @@ public class CommentsList {
 
         while (current != null) {
             sb.append("   ")
-                    .append(position) // <-- Imprime la POSICIÓN (1.)
+                    .append(position) // <-- Imprime la POSICION (1.)
                     .append(". ")
                     .append(current.getData().toString()); // <-- Imprime el Comentario (Sin el ID porque no esta en el toString de comment)
 
             if (current.getNext() != null) {
-                sb.append("\n"); // Salto de línea para el siguiente
+                sb.append("\n"); // Salto de linea para el siguiente
             }
             current = current.getNext();
             position++;

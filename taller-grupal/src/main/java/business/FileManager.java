@@ -1,88 +1,103 @@
 package business;
 
+import domain.PrioritizedTicketQueue;
+import domain.Queue;
 import domain.Ticket;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
- * Gestiona la escritura y lectura de un archivo de historial de tickets.
- * Cada estado de un ticket se guarda en una sola línea.
+ * Gestiona la exportacion de tickets a archivos CSV.
+ * Guarda tanto tickets de prioridad como comunes.
  */
 public class FileManager {
 
-    // Se definen las rutas como constantes para evitar errores de escritura.
     private static final String HISTORY_DIRECTORY = "src/main/java/history";
-    private static final String HISTORY_FILE = "history.txt";
+    private static final String HISTORY_FILE = "tickets.csv";
 
-    /**
-     * Constructor. Se asegura de que el directorio para el historial exista.
-     */
+
     public FileManager() {
         File path = new File(HISTORY_DIRECTORY);
         if (!path.exists()) {
-            path.mkdirs(); // Crea el directorio si no existe.
+            path.mkdirs();
         }
     }
 
     /**
-     * Guarda el estado actual de un Ticket en una nueva línea en el archivo de historial.
-     * Utiliza el método toString() del Ticket.
-     *
-     * @param ticket El ticket cuyo estado se va a guardar.
+     * Exporta todo el contenido actual de la cola a un archivo CSV.
+     * @param queue Cola de tickets (puede ser PrioritizedTicketQueue)
      */
-    public void logTicketState(Ticket ticket) {
-        // Validación para evitar NullPointerException.
-        if (ticket == null) {
-            System.out.println("Error: No se puede guardar un ticket nulo en el historial.");
+    public void exportToCSV(Queue<Ticket> queue) {
+        if (queue == null || queue.isEmpty()) {
+            System.out.println("No hay tickets para exportar.");
             return;
         }
 
-        File historyFile = new File(HISTORY_DIRECTORY, HISTORY_FILE);
+        File csvFile = new File(HISTORY_DIRECTORY, HISTORY_FILE);
+        boolean append = csvFile.exists();
 
-        // Usar try-with-resources asegura que el archivo se cierre automáticamente.
-        // El 'true' en FileWriter es para modo "append" (añadir al final).
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(historyFile, true))) {
+        try (BufferedWriter bw = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(csvFile, true), StandardCharsets.UTF_8))) {
 
-            String line = ticket.toString(); // Obtiene la representación en una sola línea.
-            bw.write(line);                  // Escribe la línea.
-            bw.newLine();                    // Añade un salto de línea.
+            if (!append) {
+                bw.write("Nombre;Apellido;Tipo;Estado;Prioridad\n");
+            }
 
-            System.out.println("Historial guardado correctamente.");
+            if (queue instanceof PrioritizedTicketQueue pq) {
+                exportSubQueues(bw, pq);
+            } else {
+                exportQueue(bw, queue);
+            }
+
+            System.out.println("Historial exportado correctamente en " + csvFile.getPath());
 
         } catch (IOException e) {
-            System.out.println("Error al guardar el historial: " + e.getMessage());
+            System.out.println("Error al generar CSV: " + e.getMessage());
         }
     }
 
     /**
-     * Lee todo el archivo de historial y lo devuelve como un String formateado.
-     *
-     * @return Un String con todo el contenido del historial, listo para imprimir.
+     * Exporta una cola normal (LinkedListQueue) a CSV.
      */
-    public String generateReport() {
-        File historyFile = new File(HISTORY_DIRECTORY, HISTORY_FILE);
-
-        // Si el archivo no existe, no hay informe que generar.
-        if (!historyFile.exists()) {
-            return "El archivo de historial no existe todavía. No hay nada que reportar.";
+    private void exportQueue(BufferedWriter bw, Queue<Ticket> queue) throws IOException {
+        Queue<Ticket> copy = copyQueue(queue);
+        while (!copy.isEmpty()) {
+            Ticket t = copy.dequeue();
+            bw.write(String.format("%s;%s;%s;%s;%s\n",
+                    t.getPerson().getName(),
+                    t.getPerson().getLastName(),
+                    t.getType(),
+                    t.getStatus(),
+                    t.isPriority() ? "Si" : "No"));
         }
+    }
 
-        StringBuilder report = new StringBuilder();
-        report.append("--- INFORME DE HISTORIAL DE TICKETS ---\n");
+    /**
+     * Exporta ambas colas (prioridad + comun) de la cola priorizada.
+     */
+    private void exportSubQueues(BufferedWriter bw, PrioritizedTicketQueue pq) throws IOException {
+        bw.write("# Tickets con Prioridad\n");
+        exportQueue(bw, pq.getPriorityQueue());
+        bw.write("\n# Tickets Comunes\n");
+        exportQueue(bw, pq.getCommonQueue());
+    }
 
-        // Usar try-with-resources para leer el archivo.
-        try (BufferedReader br = new BufferedReader(new FileReader(historyFile))) {
-            String line;
-            int lineNumber = 1;
-            while ((line = br.readLine()) != null) {
-                report.append(lineNumber).append(". ").append(line).append("\n");
-                lineNumber++;
-            }
-        } catch (IOException e) {
-            return "Error al leer el archivo de historial: " + e.getMessage();
+    /**
+     * Crea una copia temporal de la cola para recorrerla sin modificar la original.
+     */
+    private Queue<Ticket> copyQueue(Queue<Ticket> original) {
+        Queue<Ticket> temp = new domain.LinkedListQueue<>();
+        Queue<Ticket> copy = new domain.LinkedListQueue<>();
+        while (!original.isEmpty()) {
+            Ticket t = original.dequeue();
+            temp.enqueue(t);
+            copy.enqueue(t);
         }
-
-        report.append("--- FIN DEL INFORME ---\n");
-        return report.toString();
+        // restaurar original
+        while (!temp.isEmpty()) {
+            original.enqueue(temp.dequeue());
+        }
+        return copy;
     }
 }

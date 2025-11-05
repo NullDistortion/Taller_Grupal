@@ -17,13 +17,13 @@ public class StatusMenu implements Menu {
         System.out.println("4. PENDIENTE_DOCS");
         System.out.println("5. COMPLETADO");
         System.out.println("6. Regresar");
-        System.out.print("Seleccione una opción: ");
+        System.out.print("Seleccione una opcion: ");
     }
 
     @Override
     public Ticket handleInput(Business bs, Ticket currentTicket) {
 
-        if (!bs.valedateExistence(currentTicket)) {
+        if (!bs.validateExistence(currentTicket)) {
             return currentTicket;
         }
 
@@ -60,15 +60,16 @@ public class StatusMenu implements Menu {
             case "5":
                 currentTicket.setStatus(Status.COMPLETADO);
                 bs.registerChange(currentTicket);
+                bs.addAttendedTicket(currentTicket);
                 System.out.println("Estado cambiado a: COMPLETADO");
                 break;
 
             case "6":
-                System.out.println("Regresando al menú anterior...");
+                System.out.println("Regresando al menu anterior...");
                 return currentTicket;
 
             default:
-                System.out.println("Opción inválida. Ingrese un número entre 1 y 6.");
+                System.out.println("Opcion invalida. Ingrese un numero entre 1 y 6.");
                 break;
         }
 

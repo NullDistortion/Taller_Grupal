@@ -8,7 +8,6 @@ public class Ticket {
     private Type type;
     private Status status;
     private boolean priority;
-    //TODO agregar ID par aubicacion en csv
 
     public Ticket(Person person, Type type, Status status, boolean priority) {
         this.person = person;
@@ -60,6 +59,6 @@ public class Ticket {
         return "\nPersona: " + person.getName() + " " + person.getLastName() +
                 "\nTipo: " + type +
                 "\nEstado: " + status +
-                "\nPrioridad: " + (priority ? "Sí" : "No");
+                "\nPrioridad: " + (priority ? "Si" : "No");
     }
 }

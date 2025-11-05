@@ -11,7 +11,7 @@ public class Comments {
     public Comments(String description, LocalDate date) throws IllegalArgumentException {
 
         if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("La descripción no puede ser nula o vacía.");
+            throw new IllegalArgumentException("La descripcion no puede ser nula o vacia.");
         }
         this.description = description;
         this.date = date;

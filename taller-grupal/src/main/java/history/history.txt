@@ -1,6 +1,0 @@
-[Persona: Manuel Pineda (2117995268) [Sin Comentarios] | Tipo: MATRICULA | Estado: EN_ATENCION]
-[Persona: Miguel Morales (2486246823) [Comentarios: [2025-10-22: Buen dia] | [2025-10-22: como]] | Tipo: MATRICULA | Estado: EN_ATENCION]
-[Persona: Ximena Gonzales (1731760229) [Comentarios: [2025-10-22: Falta Entregar copia de pasaporte]] | Tipo: CONTANCIA_CERTIFICADOS | Estado: PENDIENTE_DOCS]
-[Persona: Ximena Gonzales (0744596897) [Sin Comentarios] | Tipo: MATRICULA | Estado: COMPLETADO]
-[Persona: juan armijos (dsa) [Comentarios: [2025-10-23: hola] | [2025-10-23: hola] | [2025-10-23: hola]] | Tipo: HOMOLOGACION | Estado: EN_ATENCION]
-[Persona: Cristina Pineda (2456520018) [Sin Comentarios] | Tipo: MATRICULA | Estado: EN_ATENCION]
