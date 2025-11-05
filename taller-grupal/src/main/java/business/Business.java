@@ -69,37 +69,37 @@ public class Business {
     }
 
     public Ticket undoChanges() {
-    if (changesHistorial.isEmptyUndo()) {
-        System.out.println("No hay nada que deshacer.");
-        return this.currentTicket; 
-    }
-    
-    // Guarda el estado actual (que se va a deshacer) en la pila Redo
-    changesHistorial.pushRedo(new Ticket(this.currentTicket));
-    
-    // Actualiza el estado interno de la clase
-    this.currentTicket = changesHistorial.popUndo(); 
-    
-    // Devuelve el ticket actualizado (el estado deshecho)
-    return this.currentTicket;
-}
+        if (changesHistorial.isEmptyUndo()) {
+            System.out.println("No hay nada que deshacer.");
+            return this.currentTicket;
+        }
 
-    public Ticket redoChanges() {
-    if (changesHistorial.isEmptyRedo()) {
-        System.out.println("No hay nada que rehacer.");
-        // Devuelve el ticket actual si no hay nada que rehacer
+        // Guarda el estado actual (que se va a deshacer) en la pila Redo
+        changesHistorial.pushRedo(new Ticket(this.currentTicket));
+
+        // Actualiza el estado interno de la clase
+        this.currentTicket = changesHistorial.popUndo();
+
+        // Devuelve el ticket actualizado (el estado deshecho)
         return this.currentTicket;
     }
-    
-    // Guarda el estado actual (el estado deshecho) en la pila Undo
-    changesHistorial.pushUndo(new Ticket(this.currentTicket));
-    
-    // Actualiza el estado interno de la clase
-    this.currentTicket = changesHistorial.popRedo(); 
-    
-    // Devuelve el ticket actualizado (el estado rehecho)
-    return this.currentTicket;
-}
+
+    public Ticket redoChanges() {
+        if (changesHistorial.isEmptyRedo()) {
+            System.out.println("No hay nada que rehacer.");
+            // Devuelve el ticket actual si no hay nada que rehacer
+            return this.currentTicket;
+        }
+
+        // Guarda el estado actual (el estado deshecho) en la pila Undo
+        changesHistorial.pushUndo(new Ticket(this.currentTicket));
+
+        // Actualiza el estado interno de la clase
+        this.currentTicket = changesHistorial.popRedo();
+
+        // Devuelve el ticket actualizado (el estado rehecho)
+        return this.currentTicket;
+    }
 
     public void discardLastUndo() {
         changesHistorial.popUndo();
@@ -189,23 +189,39 @@ public class Business {
     }
 
     public void createTicket() {
-        System.out.println("\n=== CREAR NUEVO TICKET ===");
 
+        System.out.println("\n=== CREAR NUEVO TICKET ===");
+        System.out.println("En cualquier paso, ingrese 'q' para cancelar y volver al menú.");
+
+        // 1. Pedir datos de la persona
+        // Asumo que Utility.requestPersonData ya devuelve null si se cancela
         Person person = Utility.requestPersonData(sc);
         if (person == null) {
-            return;
+            System.out.println("Creación de ticket cancelada.");
+            return; // Salir del método
         }
 
-        boolean priority = Utility.validatePrio(sc);
-        Type type = Utility.selectType(sc);
+        Boolean priority = Utility.validatePrio(sc);
+        if (priority == null) {
+            System.out.println("Creación de ticket cancelada.");
+            return; // Salir del método
+        }
 
-        Ticket newTicket = new Ticket(generateNextTicketId(), person, type, Status.EN_COLA, priority);
+        Type type = Utility.selectType(sc);
+        if (type == null) {
+            System.out.println("Creación de ticket cancelada.");
+            return; // Salir del método
+        }
+
+        // Si llegamos aquí, toda la información fue recolectada:
+        Ticket newTicket = new Ticket(generateNextTicketId(), person, type, Status.EN_COLA, priority); // Java auto-unboxes 'priority' aquí
 
         saveLastId();
-        nextTicketId++;
+        nextTicketId++; // Asegúrate que esta lógica coincide con generateNextTicketId()
         addToQueue(newTicket);
 
         System.out.println("\nTicket agregado correctamente:\n" + newTicket);
+
     }
 
     public void handleDeleteComment(String input) {
@@ -250,7 +266,6 @@ public class Business {
         }
     }
 
-
     public void returnToQueueIfPendingDocuments() {
         if (currentTicket != null && currentTicket.getStatus() == Status.PENDIENTE_DOCS) {
             addToQueue(currentTicket);
@@ -292,39 +307,40 @@ public class Business {
     public void showFinalizedHistory() {
         fileManager.printFinalizedTickets(attendedTickets);
     }
-    
+
     public void printCurrentTicket() {
         System.out.println(currentTicket.toString());
     }
-    
+
     public void exportFinalizedTicketsToJSON() {
-    if (attendedTickets == null || attendedTickets.isEmpty()) {
-        System.out.println("No hay tickets finalizados para exportar.");
-        return;
-    }
-    fileManager.exportFinalizedTicketsToJSON(attendedTickets);
-}
-public void importFinalizedTicketsFromJSON() {
-    Queue<Ticket> imported = fileManager.importFinalizedTicketsFromJSON();
-    if (imported.isEmpty()) {
-        System.out.println("No se encontraron tickets finalizados en el archivo JSON.");
-        return;
+        if (attendedTickets == null || attendedTickets.isEmpty()) {
+            System.out.println("No hay tickets finalizados para exportar.");
+            return;
+        }
+        fileManager.exportFinalizedTicketsToJSON(attendedTickets);
     }
 
-    while (!imported.isEmpty()) {
-        Ticket t = imported.dequeue();
-        attendedTickets.enqueue(t);
+    public void importFinalizedTicketsFromJSON() {
+        Queue<Ticket> imported = fileManager.importFinalizedTicketsFromJSON();
+        if (imported.isEmpty()) {
+            System.out.println("No se encontraron tickets finalizados en el archivo JSON.");
+            return;
+        }
+
+        while (!imported.isEmpty()) {
+            Ticket t = imported.dequeue();
+            attendedTickets.enqueue(t);
+        }
+
+        System.out.println("Tickets finalizados cargados en memoria.");
     }
 
-    System.out.println("Tickets finalizados cargados en memoria.");
-}
-public void printFinalizedTickets() {
-    if (attendedTickets == null || attendedTickets.isEmpty()) {
-        System.out.println("No hay tickets finalizados para mostrar.");
-        return;
+    public void printFinalizedTickets() {
+        if (attendedTickets == null || attendedTickets.isEmpty()) {
+            System.out.println("No hay tickets finalizados para mostrar.");
+            return;
+        }
+        fileManager.printFinalizedTickets(attendedTickets);
     }
-    fileManager.printFinalizedTickets(attendedTickets);
-}
-
 
 }

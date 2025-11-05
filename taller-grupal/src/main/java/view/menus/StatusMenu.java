@@ -30,38 +30,58 @@ public class StatusMenu implements Menu {
         Scanner sc = new Scanner(System.in);
         System.out.println("\nEstado actual: " + currentTicket.getStatus());
         showMenu();
-         String option = Utility.requestNonEmptyString(sc,"Seleccione una opcion: " );
+        String option = Utility.requestNonEmptyString(sc, "Seleccione una opcion: ");
 
         switch (option) {
             case "1":
-                currentTicket.setStatus(Status.EN_COLA);
-                bs.registerChange();
-                System.out.println("Estado cambiado a: EN_COLA");
+                if (currentTicket.getStatus() != Status.EN_COLA) {
+                    currentTicket.setStatus(Status.EN_COLA);
+                    bs.registerChange();
+                    System.out.println("Estado cambiado a: EN_COLA");
+                } else {
+                    System.out.println("El Estado seleccionado es Igual al estado actual");
+                }
                 break;
 
             case "2":
+                 if (currentTicket.getStatus() != Status.EN_ATENCION) {
                 currentTicket.setStatus(Status.EN_ATENCION);
                 bs.registerChange();
                 System.out.println("Estado cambiado a: EN_ATENCION");
+                 } else {
+                    System.out.println("El Estado seleccionado es Igual al estado actual");
+                }
                 break;
 
             case "3":
+                 if (currentTicket.getStatus() != Status.EN_PROCESO) {
                 currentTicket.setStatus(Status.EN_PROCESO);
                 bs.registerChange();
                 System.out.println("Estado cambiado a: EN_PROCESO");
+                 } else {
+                    System.out.println("El Estado seleccionado es Igual al estado actual");
+                }
                 break;
 
             case "4":
+                 if (currentTicket.getStatus() != Status.PENDIENTE_DOCS) {
                 currentTicket.setStatus(Status.PENDIENTE_DOCS);
                 bs.registerChange();
                 System.out.println("Estado cambiado a: PENDIENTE_DOCS");
+                 } else {
+                    System.out.println("El Estado seleccionado es Igual al estado actual");
+                }
                 break;
 
             case "5":
+                 if (currentTicket.getStatus() != Status.COMPLETADO) {
                 currentTicket.setStatus(Status.COMPLETADO);
                 bs.registerChange();
                 bs.addAttendedTicket(currentTicket);
                 System.out.println("Estado cambiado a: COMPLETADO");
+                } else {
+                    System.out.println("El Estado seleccionado es Igual al estado actual");
+                }
                 break;
 
             case "6":

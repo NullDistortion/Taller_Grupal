@@ -16,14 +16,14 @@ public class Utility {
 
     public static Person requestPersonData(Scanner sc) {
         // 1. Pedir Nombre
-        String name = requestValidString(sc, "Nombre: ");
-        if (name == null) {
+        String name = requestValidString(sc, "Nombre (o 'q' para cancelar): ");
+        if (name.equalsIgnoreCase("q")) {
             return null; // Cancelación propagada
         }
 
         // 2. Pedir Apellido
-        String lastName = requestValidString(sc, "Apellido: ");
-        if (lastName == null) {
+        String lastName = requestValidString(sc, "Apellido (o 'q' para cancelar): ");
+        if (lastName.equalsIgnoreCase("q")) {
             return null; // Cancelación propagada
         }        
         return new Person(name, lastName);
@@ -80,12 +80,7 @@ public class Utility {
             System.out.print(promptMessage);
             input = sc.nextLine().trim();
 
-            // 1. Revisar si es 'q' para cancelar
-            if (input.equalsIgnoreCase("q")) {
-                return null;
-            }
-
-            // 2. Validaciones existentes
+       
             if (input.isEmpty()) {
                 System.out.println("El texto no puede estar vacío.");
             } else if (input.contains(" ")) {
@@ -93,7 +88,7 @@ public class Utility {
             } else if (!input.matches("[a-zA-Z]+")) {
                 System.out.println("Solo se permiten letras.");
             } else {
-                // Si pasa todas las validaciones, se retorna el input
+              
                 return input;
             }
             
@@ -103,13 +98,8 @@ public class Utility {
 
     public static Integer requestValidInteger(Scanner sc, String prompt) { // ¡Cambiado a Integer!
         while (true) {
-            System.out.print(prompt + " (o 'q' para cancelar): ");
+            System.out.print(prompt);
             String input = sc.nextLine().trim();
-
-            if (input.equalsIgnoreCase("q")) {
-                return null; // Cancelación
-            }
-
             try {
                 int number = Integer.parseInt(input);
                 if (number <= 0) {
@@ -126,12 +116,8 @@ public class Utility {
     public static String requestNonEmptyString(Scanner sc, String prompt) {
         String input;
         while (true) {
-            System.out.print(prompt + " (o 'q' para cancelar): ");
+            System.out.print(prompt);
             input = sc.nextLine().trim();
-
-            if (input.equalsIgnoreCase("q")) {
-                return null; // Cancelación
-            }
             
             if (input.isEmpty()) {
                 System.out.println("La descripción no puede estar vacía.");
