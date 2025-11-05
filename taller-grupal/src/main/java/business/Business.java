@@ -190,15 +190,6 @@ public class Business {
         System.out.println("\nTicket agregado correctamente:\n" + newTicket);
     }
 
-    public void printTicketHistory() {
-        if (attendedTickets == null || attendedTickets.isEmpty()) {
-            System.out.println("No hay tickets atendidos para exportar.");
-            return;
-        }
-
-        fileManager.exportFinalizedTicketsWithComments(attendedTickets);
-    }
-
     public void handleDeleteComment(String input) {
         if (!validateExistence()) {
             return;
@@ -241,13 +232,6 @@ public class Business {
         }
     }
 
-    public void exportFinalizedTickets() {
-        if (attendedTickets == null || attendedTickets.isEmpty()) {
-            System.out.println("No hay tickets finalizados para exportar.");
-            return;
-        }
-        fileManager.exportFinalizedTicketsWithComments(attendedTickets);
-    }
 
     public void returnToQueueIfPendingDocuments() {
         if (currentTicket != null && currentTicket.getStatus() == Status.PENDIENTE_DOCS) {
@@ -287,9 +271,6 @@ public class Business {
         }
     }
 
-    public void showFinalizedHistory() {
-        fileManager.printFinalizedTickets(attendedTickets);
-    }
     
     public void exportFinalizedTicketsToJSON() {
     if (attendedTickets == null || attendedTickets.isEmpty()) {
@@ -312,13 +293,5 @@ public void importFinalizedTicketsFromJSON() {
 
     System.out.println("Tickets finalizados cargados en memoria.");
 }
-public void printFinalizedTickets() {
-    if (attendedTickets == null || attendedTickets.isEmpty()) {
-        System.out.println("No hay tickets finalizados para mostrar.");
-        return;
-    }
-    fileManager.printFinalizedTickets(attendedTickets);
-}
-
 
 }

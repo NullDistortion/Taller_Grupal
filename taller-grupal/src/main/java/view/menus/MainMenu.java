@@ -50,7 +50,6 @@ public class MainMenu implements Menu {
 
             case "4": // VER HISTORIAL
                 bs.importFinalizedTicketsFromJSON();// Esto no afecta a currentTicket
-                bs.printFinalizedTickets();
                 break;
 
             case "5": // (Opcional) VOLVER A TICKET ACTUAL
@@ -69,7 +68,6 @@ public class MainMenu implements Menu {
                     bs.savePendingQueue(); // Tu nueva función de persistencia
 
                     System.out.println("Guardando historial de tickets finalizados...");
-                    bs.exportFinalizedTickets();
                     bs.exportFinalizedTicketsToJSON();
                     System.out.println("Saliendo del programa.");
 

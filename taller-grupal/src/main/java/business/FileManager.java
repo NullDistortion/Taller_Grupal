@@ -25,7 +25,6 @@ public class FileManager {
 
     private static final String HISTORY_DIRECTORY = "src/main/java/history";
     private static final String PENDING_FILE = "tickets_pendientes.csv";
-    private static final String HISTORY_FILE = "tickets.csv";
     private static final String LAST_ID_FILE = "last_id.txt";
     private static final String HISTORY_JSON_FILE = "tickets_finalizados.json";
 
@@ -38,7 +37,6 @@ public class FileManager {
 
     /**
      * Exporta todo el contenido actual de la cola de atencion a un archivo CSV.
-     *
      * @param queue Cola de tickets (puede ser PrioritizedTicketQueue)
      */
     public void exportPendingTickets(Queue<Ticket> queue) {
@@ -71,78 +69,6 @@ public class FileManager {
         } catch (IOException e) {
             System.out.println("Error al exportar tickets pendientes: " + e.getMessage());
         }
-    }
-
-    /**
-     * Exporta todo el contenido actual de la cola de atencion a un archivo CSV.
-     *
-     * @param queue Cola de tickets (puede ser PrioritizedTicketQueue)
-     */
-    public void exportFinalizedTicketsWithComments(Queue<Ticket> queue) {
-        if (queue == null || queue.isEmpty()) {
-            System.out.println("No hay tickets finalizados para exportar.");
-            return;
-        }
-
-        File csvFile = new File(HISTORY_DIRECTORY, HISTORY_FILE);
-        boolean append = csvFile.exists();
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvFile, true))) {
-            if (!append) {
-                bw.write("ID;Nombre;Apellido;Tipo;Estado;Prioridad\n");
-            }
-
-            Queue<Ticket> copy = copyQueue(queue);
-            while (!copy.isEmpty()) {
-                Ticket t = copy.dequeue();
-                if (t.getStatus() == Status.COMPLETADO) {
-                    bw.write(String.format("%d;%s;%s;%s;%s;%s\n",
-                            t.getId(),
-                            t.getPerson().getName(),
-                            t.getPerson().getLastName(),
-                            t.getType(),
-                            t.getStatus(),
-                            t.isPriority() ? "Si" : "No"));
-
-                    bw.write("Comentarios:\n");
-                    bw.write(t.getPerson().getComments().toString());
-                    bw.write("\n--------------------------------------\n");
-                }
-            }
-
-            System.out.println("Tickets finalizados exportados en: " + csvFile.getPath());
-
-        } catch (IOException e) {
-            System.out.println("Error al exportar tickets finalizados: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Exporta una cola normal (LinkedListQueue) a CSV.
-     */
-    private void exportQueue(BufferedWriter bw, Queue<Ticket> queue) throws IOException {
-        Queue<Ticket> copy = copyQueue(queue);
-        while (!copy.isEmpty()) {
-            Ticket t = copy.dequeue();
-            bw.write(String.format("%d;%s;%s;%s;%s;%s\n",
-                    t.getId(),
-                    t.getPerson().getName(),
-                    t.getPerson().getLastName(),
-                    t.getType(),
-                    t.getStatus(),
-                    t.isPriority() ? "Si" : "No"));
-
-        }
-    }
-
-    /**
-     * Exporta ambas colas (prioridad + comun) de la cola priorizada.
-     */
-    private void exportSubQueues(BufferedWriter bw, PrioritizedTicketQueue pq) throws IOException {
-        bw.write("# Tickets con Prioridad\n");
-        exportQueue(bw, pq.getPriorityQueue());
-        bw.write("\n# Tickets Comunes\n");
-        exportQueue(bw, pq.getCommonQueue());
     }
 
     /**
@@ -228,105 +154,6 @@ public class FileManager {
         return importedQueue;
     }
 
-    public Queue<Ticket> importFinalizedTicketsFromCSV() {
-        Queue<Ticket> imported = new LinkedListQueue<>();
-        File csvFile = new File(HISTORY_DIRECTORY, HISTORY_FILE);
-
-        if (!csvFile.exists()) {
-            System.out.println("No hay archivo CSV de tickets finalizados.");
-            return imported;
-        }
-
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            String line;
-            boolean readingComments = false;
-            Ticket currentTicket = null;
-
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) {
-                    continue;
-                }
-
-                if (line.startsWith("ID;")) {
-                    continue; // encabezado
-                }
-                if (line.startsWith("Comentarios:")) {
-                    readingComments = true;
-                    continue;
-                }
-
-                if (line.startsWith("--------------------------------------")) {
-                    if (currentTicket != null) {
-                        imported.enqueue(currentTicket);
-                        currentTicket = null;
-                    }
-                    readingComments = false;
-                    continue;
-                }
-
-                if (!readingComments) {
-                    String[] parts = line.split(";");
-                    if (parts.length < 6) {
-                        continue;
-                    }
-
-                    int id = Integer.parseInt(parts[0]);
-                    String name = parts[1];
-                    String lastName = parts[2];
-                    Type type = Type.valueOf(parts[3]);
-                    Status status = Status.valueOf(parts[4]);
-                    boolean priority = parts[5].equalsIgnoreCase("Si");
-
-                    Person person = new Person(name, lastName);
-                    currentTicket = new Ticket(id, person, type, status, priority);
-                } else {
-                    // Comentario en formato: 1. [2025-11-05: texto]
-                    int start = line.indexOf("[");
-                    int end = line.indexOf("]");
-                    if (start != -1 && end != -1) {
-                        String content = line.substring(start + 1, end);
-                        String[] commentParts = content.split(":");
-                        if (commentParts.length >= 2) {
-                            String date = commentParts[0].trim();
-                            String desc = line.substring(line.indexOf(":") + 1).trim();
-                            Comments comment = new Comments(desc, LocalDate.parse(date));
-                            currentTicket.getPerson().getComments().addComment(comment.getDescription());
-                        }
-                    }
-                }
-            }
-
-            System.out.println("Tickets finalizados importados desde CSV.");
-        } catch (IOException | IllegalArgumentException e) {
-            System.out.println("Error al importar tickets finalizados: " + e.getMessage());
-        }
-
-        return imported;
-    }
-
-    public void printFinalizedTickets(Queue<Ticket> queue) {
-        if (queue == null || queue.isEmpty()) {
-            System.out.println("No hay tickets finalizados para mostrar.");
-            return;
-        }
-
-        Queue<Ticket> copy = copyQueue(importFinalizedTicketsFromCSV());
-        System.out.println("\n=== HISTORIAL DE TICKETS FINALIZADOS ===");
-
-        while (!copy.isEmpty()) {
-            Ticket t = copy.dequeue();
-            if (t.getStatus() == Status.COMPLETADO) {
-                System.out.println("ID: " + t.getId());
-                System.out.println("Nombre: " + t.getPerson().getName() + " " + t.getPerson().getLastName());
-                System.out.println("Tipo: " + t.getType());
-                System.out.println("Estado: " + t.getStatus());
-                System.out.println("Prioridad: " + (t.isPriority() ? "Sí" : "No"));
-                System.out.println("Comentarios: " + t.getPerson().getComments().toString());
-                System.out.println("--------------------------------------");
-            }
-        }
-    }
 public void exportFinalizedTicketsToJSON(Queue<Ticket> queue) {
         if (queue == null || queue.isEmpty()) {
             System.out.println("No hay tickets finalizados para exportar a JSON.");
@@ -374,8 +201,6 @@ public void exportFinalizedTicketsToJSON(Queue<Ticket> queue) {
             // Crear el array de comentarios anidado
             JSONArray commentsJson = new JSONArray();
             
-            // Asumo que CommentsList tiene un método getHead() que devuelve un Node<Comments>
-            // y que la clase Comments tiene getDescription() y getCreationDate()
             Node<Comments> currentCommentNode = t.getPerson().getComments().getHead(); // ¡Debes implementar getHead() en CommentsList!
             while (currentCommentNode != null) {
                 Comments comment = currentCommentNode.getData();
@@ -440,13 +265,6 @@ public Queue<Ticket> importFinalizedTicketsFromJSON() {
                     String desc = (String) commentJson.get("description");
                     String dateStr = (String) commentJson.get("date");
                     
-                    // IMPORTANTE:
-                    // Aquí estoy asumiendo que tu método addComment(String desc)
-                    // crea un nuevo Comments con la fecha actual.
-                    // Al importar, esto significa que la fecha original se pierde.
-                    // Esto es consistente con tu importación de CSV (línea 313).
-                    // Si quieres preservar la fecha, necesitarías un método como:
-                    // addComment(String desc, LocalDate date)
                     person.getComments().addComment(desc);
                 }
 
