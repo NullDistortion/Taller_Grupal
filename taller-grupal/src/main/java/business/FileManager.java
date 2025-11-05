@@ -64,7 +64,7 @@ public class FileManager {
                 }
             }
 
-            System.out.println("Tickets pendientes exportados en: " + csvFile.getPath());
+            System.out.println("Tickets pendientes guardados Correctamente ");
 
         } catch (IOException e) {
             System.out.println("Error al exportar tickets pendientes: " + e.getMessage());
@@ -179,7 +179,7 @@ public class FileManager {
     
 public void exportFinalizedTicketsToJSON(Queue<Ticket> queue) {
         if (queue == null || queue.isEmpty()) {
-            System.out.println("No hay tickets finalizados para exportar a JSON.");
+            System.out.println("No hay tickets finalizados para exportar.");
             return;
         }
 
@@ -255,12 +255,12 @@ public void exportFinalizedTicketsToJSON(Queue<Ticket> queue) {
         if (addedCount > 0) {
             try (FileWriter writer = new FileWriter(jsonFile, false)) { // false = sobrescribir
                 writer.write(mainArray.toJSONString());
-                System.out.println(addedCount + " tickets finalizados nuevos exportados a: " + jsonFile.getPath());
+                //System.out.println(addedCount + " tickets finalizados nuevos exportados a: " + jsonFile.getPath());
             } catch (IOException e) {
                 System.out.println("Error al exportar tickets a JSON: " + e.getMessage());
             }
         } else {
-            System.out.println("No hay tickets nuevos para añadir a JSON.");
+            System.out.println("No hay tickets nuevos para guardar.");
         }
     }
 
@@ -309,10 +309,10 @@ public Queue<Ticket> importFinalizedTicketsFromJSON() {
                 imported.enqueue(ticket);
             }
 
-            System.out.println("Tickets finalizados importados desde JSON.");
+            System.out.println("Tickets finalizados importados correctamente.");
 
         } catch (IOException | ParseException | ClassCastException | IllegalArgumentException e) {
-            System.out.println("Error al importar tickets desde JSON: " + e.getMessage());
+            System.out.println("Error al importar tickets: " + e.getMessage());
         }
 
         return imported;

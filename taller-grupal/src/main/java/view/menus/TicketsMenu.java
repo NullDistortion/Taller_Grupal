@@ -11,12 +11,11 @@ public class TicketsMenu implements Menu {
     @Override
     public void showMenu() {
         System.out.println("\n=== MENU DE TICKET ===");
-        System.out.println("1. Ver comentarios");
-        System.out.println("2. Gestor de comentarios");
-        System.out.println("3. Cambiar estado");
-        System.out.println("4. Deshacer cambio");
-        System.out.println("5. Rehacer cambio");
-        System.out.println("6. Finalizar Atencion de Ticket");
+        System.out.println("1. Gestor de comentarios");
+        System.out.println("2. Cambiar estado");
+        System.out.println("3. Deshacer cambio");
+        System.out.println("4. Rehacer cambio");
+        System.out.println("5. Finalizar Atencion de Ticket");
         System.out.println("0. Volver al menu principal");
         System.out.print("Seleccione una opcion: ");
     }
@@ -32,41 +31,42 @@ public class TicketsMenu implements Menu {
 
         while (continuar) {
             bs.printCurrentTicket();
+            bs.printCommentsOfCurrentTicket();
             showMenu();
             String option = sc.nextLine().trim();
 
             switch (option) {
+
                 case "1":
-                    
-                    bs.printCommentsOfCurrentTicket();
-                    break;
-                    
-                case "2":
                     currentTicket = new CommentMenu().handleInput(bs, currentTicket);
                     break;
-                case "3":
+                case "2":
                     currentTicket = new StatusMenu().handleInput(bs, currentTicket);
                     if (currentTicket.getStatus() == Status.PENDIENTE_DOCS) {
                         bs.returnToQueueIfPendingDocuments();
-                        currentTicket=null;
+                        currentTicket = null;
                         continuar = false;
                         break;
                     }
-                     if (currentTicket.getStatus() == Status.COMPLETADO) {
+                    if (currentTicket.getStatus() == Status.COMPLETADO) {
                         bs.finalizeCurrentTicket();
-                        currentTicket=null;
+                        currentTicket = null;
                         continuar = false;
                     }
                     break;
-                case "4":
+                case "3":
+                    System.out.println("\n\n");
                     currentTicket = bs.undoChanges();
                     break;
-                case "5":
+                case "4":
+                    System.out.println("\n\n");
                     currentTicket = bs.redoChanges();
                     break;
-                case "6":
+                case "5":
+                    System.out.println("\n\n");
                     bs.finalizeCurrentTicket();
-                    currentTicket=null;
+                    System.out.println("\n\n");
+                    currentTicket = null;
                 case "0":
                     continuar = false;
                     break;

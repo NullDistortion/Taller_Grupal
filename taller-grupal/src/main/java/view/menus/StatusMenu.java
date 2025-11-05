@@ -35,8 +35,8 @@ public class StatusMenu implements Menu {
         switch (option) {
             case "1":
                 if (currentTicket.getStatus() != Status.EN_COLA) {
-                    currentTicket.setStatus(Status.EN_COLA);
                     bs.registerChange();
+                    currentTicket.setStatus(Status.EN_COLA);
                     System.out.println("Estado cambiado a: EN_COLA");
                 } else {
                     System.out.println("El Estado seleccionado es Igual al estado actual");
@@ -44,44 +44,40 @@ public class StatusMenu implements Menu {
                 break;
 
             case "2":
-                 if (currentTicket.getStatus() != Status.EN_ATENCION) {
-                currentTicket.setStatus(Status.EN_ATENCION);
-                bs.registerChange();
-                System.out.println("Estado cambiado a: EN_ATENCION");
-                 } else {
+                if (currentTicket.getStatus() != Status.EN_ATENCION) {
+                    bs.registerChange();
+                    currentTicket.setStatus(Status.EN_ATENCION);
+                    System.out.println("Estado cambiado a: EN_ATENCION");
+                } else {
                     System.out.println("El Estado seleccionado es Igual al estado actual");
                 }
                 break;
 
             case "3":
-                 if (currentTicket.getStatus() != Status.EN_PROCESO) {
-                currentTicket.setStatus(Status.EN_PROCESO);
-                bs.registerChange();
-                System.out.println("Estado cambiado a: EN_PROCESO");
-                 } else {
+                if (currentTicket.getStatus() != Status.EN_PROCESO) {
+                    bs.registerChange();
+                    currentTicket.setStatus(Status.EN_PROCESO);
+                    System.out.println("Estado cambiado a: EN_PROCESO");
+                } else {
                     System.out.println("El Estado seleccionado es Igual al estado actual");
                 }
                 break;
 
             case "4":
-                 if (currentTicket.getStatus() != Status.PENDIENTE_DOCS) {
-                currentTicket.setStatus(Status.PENDIENTE_DOCS);
-                bs.registerChange();
-                System.out.println("Estado cambiado a: PENDIENTE_DOCS");
-                 } else {
+                if (currentTicket.getStatus() != Status.PENDIENTE_DOCS) {
+                    bs.registerChange();
+                    currentTicket.setStatus(Status.PENDIENTE_DOCS);
+                    System.out.println("Estado cambiado a: PENDIENTE_DOCS");
+                } else {
                     System.out.println("El Estado seleccionado es Igual al estado actual");
                 }
                 break;
 
             case "5":
-                 if (currentTicket.getStatus() != Status.COMPLETADO) {
                 currentTicket.setStatus(Status.COMPLETADO);
                 bs.registerChange();
                 bs.addAttendedTicket(currentTicket);
                 System.out.println("Estado cambiado a: COMPLETADO");
-                } else {
-                    System.out.println("El Estado seleccionado es Igual al estado actual");
-                }
                 break;
 
             case "6":

@@ -46,6 +46,7 @@ public class MainMenu implements Menu {
                 break;
             case "3": // CREAR NUEVO TICKET
                 bs.createTicket();
+                System.out.println("\n\n");
                 break;
 
             case "4": // VER HISTORIAL
@@ -65,6 +66,7 @@ public class MainMenu implements Menu {
 
             case "6": // GUARDAR Y SALIR
                 if (currentTicket == null) {
+                    System.out.println("\n\n");
                     System.out.println("Guardando tickets pendientes en cola...");
                     bs.savePendingQueue(); // Tu nueva función de persistencia
 

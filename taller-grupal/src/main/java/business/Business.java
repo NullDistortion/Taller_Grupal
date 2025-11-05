@@ -29,7 +29,7 @@ public class Business {
 
     public Ticket processTicket() {
         if (currentTicket != null) {
-            System.out.println("Ya hay un ticket en atención. Finalícelo antes de continuar.");
+            System.out.println("Ya hay un ticket en atencion. Finalicelo antes de continuar.");
             return null;
         }
 
@@ -49,7 +49,7 @@ public class Business {
 
     public void finalizeCurrentTicket() {
         if (currentTicket == null) {
-            System.out.println("No hay ticket en atención.");
+            System.out.println("No hay ticket en atencion.");
             return;
         }
 
@@ -79,8 +79,7 @@ public class Business {
 
         // Actualiza el estado interno de la clase
         this.currentTicket = changesHistorial.popUndo();
-
-        // Devuelve el ticket actualizado (el estado deshecho)
+        System.out.println("Cambio deshecho");
         return this.currentTicket;
     }
 
@@ -94,10 +93,8 @@ public class Business {
         // Guarda el estado actual (el estado deshecho) en la pila Undo
         changesHistorial.pushUndo(new Ticket(this.currentTicket));
 
-        // Actualiza el estado interno de la clase
         this.currentTicket = changesHistorial.popRedo();
-
-        // Devuelve el ticket actualizado (el estado rehecho)
+        System.out.println("Cambio Rehecho");
         return this.currentTicket;
     }
 
@@ -119,7 +116,7 @@ public class Business {
             Person person = currentTicket.getPerson();
             CommentsList list = person.getComments();
             list.addComment(commentDescription);
-            System.out.println("Comentario anadido.");
+            System.out.println("Comentario agregado.");
         } catch (IllegalArgumentException e) {
             this.discardLastUndo();
             throw e;
@@ -191,25 +188,25 @@ public class Business {
     public void createTicket() {
 
         System.out.println("\n=== CREAR NUEVO TICKET ===");
-        System.out.println("En cualquier paso, ingrese 'q' para cancelar y volver al menú.");
+        System.out.println("En cualquier paso, ingrese 'q' para cancelar y volver al menu.");
 
         // 1. Pedir datos de la persona
         // Asumo que Utility.requestPersonData ya devuelve null si se cancela
         Person person = Utility.requestPersonData(sc);
         if (person == null) {
-            System.out.println("Creación de ticket cancelada.");
+            System.out.println("Creacion de ticket cancelada.");
             return; // Salir del método
         }
 
         Boolean priority = Utility.validatePrio(sc);
         if (priority == null) {
-            System.out.println("Creación de ticket cancelada.");
+            System.out.println("Creacion de ticket cancelada.");
             return; // Salir del método
         }
 
         Type type = Utility.selectType(sc);
         if (type == null) {
-            System.out.println("Creación de ticket cancelada.");
+            System.out.println("Creacion de ticket cancelada.");
             return; // Salir del método
         }
 
@@ -254,8 +251,8 @@ public class Business {
 
         printCommentsOfCurrentTicket();
 
-        int pos = Utility.requestValidInteger(sc, "Número de comentario a actualizar: ");
-        String newDesc = Utility.requestNonEmptyString(sc, "Nueva descripción: ");
+        int pos = Utility.requestValidInteger(sc, "Numero de comentario a actualizar: ");
+        String newDesc = Utility.requestNonEmptyString(sc, "Nueva descripcipn: ");
         updateCommentOnCurrentTicket(pos, newDesc);
     }
 
@@ -323,7 +320,7 @@ public class Business {
     public void importFinalizedTicketsFromJSON() {
         Queue<Ticket> imported = fileManager.importFinalizedTicketsFromJSON();
         if (imported.isEmpty()) {
-            System.out.println("No se encontraron tickets finalizados en el archivo JSON.");
+            System.out.println("No se encontraron tickets finalizados.");
             return;
         }
 
@@ -332,7 +329,7 @@ public class Business {
             attendedTickets.enqueue(t);
         }
 
-        System.out.println("Tickets finalizados cargados en memoria.");
+        System.out.println("Tickets finalizados cargados.");
     }
 
     public void printFinalizedTickets() {
