@@ -4,12 +4,14 @@ import enums.Status;
 import enums.Type;
 
 public class Ticket {
+    private int id;
     private Person person;
     private Type type;
     private Status status;
     private boolean priority;
 
-    public Ticket(Person person, Type type, Status status, boolean priority) {
+    public Ticket(int id,Person person, Type type, Status status, boolean priority) {
+        this.id=id;
         this.person = person;
         this.type = type;
         this.status = status;
@@ -17,9 +19,19 @@ public class Ticket {
     }
 
     public Ticket(Ticket other) {
+        this.id=other.id;
         this.person = new Person(other.person);
         this.type = other.type;
         this.status = other.status;
+        this.priority=other.priority;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Person getPerson() {

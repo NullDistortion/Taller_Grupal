@@ -3,52 +3,48 @@ package view.menus;
 import java.util.Scanner;
 import business.Business;
 import domain.Ticket;
+import utility.Utility;
 import view.Menu;
 
-public class ComentMenu implements Menu {
+public class CommentMenu implements Menu {
 
     @Override
     public void showMenu() {
         System.out.println("\n=== COMENTARIOS ===");
-        System.out.println("1. Anadir comentario");
+        System.out.println("1. Agregar comentario");
         System.out.println("2. Modificar comentario");
         System.out.println("3. Eliminar comentario");
         System.out.println("4. Regresar");
-        System.out.print("Seleccione una opcion: ");
     }
 
     @Override
     public Ticket handleInput(Business bs, Ticket currentTicket) {
 
-        if (!bs.validateExistence(currentTicket)) {
+        if (!bs.validateExistence()) {
             return currentTicket;
         }
 
         Scanner sc = new Scanner(System.in);
         showMenu();
-        String option = sc.nextLine();
+        String option = Utility.requestNonEmptyString(sc, "Seleccione una opcion: ");
 
         try {
             switch (option) {
                 case "1":
-                    System.out.print("Comentario: ");
-                    String comment = sc.nextLine();
-                    bs.addCommentToCurrentTicket(currentTicket, comment);
+                    String comment = Utility.requestNonEmptyString(sc, "Comentario: ");
+                    bs.addCommentToCurrentTicket(comment);
                     break;
 
                 case "2":
-                    System.out.print("Ingrese el ID del comentario: ");
-                    int posUpdate = Integer.parseInt(sc.nextLine());
+                    int posUpdate = Utility.requestValidInteger(sc, "Ingrese el numero del comentario: ");
 
-                    System.out.print("Nuevo texto: ");
-                    String newText = sc.nextLine();
-                    bs.updateCommentOnCurrentTicket(posUpdate, newText, currentTicket);
+                    String newText = Utility.requestNonEmptyString(sc, "Nuevo texto: ");
+                    bs.updateCommentOnCurrentTicket(posUpdate, newText);
                     break;
 
                 case "3":
-                    System.out.print("Ingrese el ID del comentario: ");
-                    int posDel = Integer.parseInt(sc.nextLine());
-                    bs.deleteCommentFromCurrentTicket(currentTicket, posDel);
+                    int posDel = Utility.requestValidInteger(sc, "Ingrese el numero del comentario a Eliminar: ");
+                    bs.deleteCommentFromCurrentTicket(posDel);
                     break;
 
                 case "4":

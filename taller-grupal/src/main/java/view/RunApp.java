@@ -8,11 +8,13 @@ public class RunApp {
 
     public static void main(String[] args) {
         Business bs = new Business();
+
         Ticket currentTicket = null;
         Menu mainMenu = new MainMenu();
-
+        bs.loadPendingTickets();
         while (true) {
             mainMenu.showMenu();
+
             currentTicket = mainMenu.handleInput(bs, currentTicket);
         }
     }

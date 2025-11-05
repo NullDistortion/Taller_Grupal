@@ -3,21 +3,24 @@ package business;
 import domain.*;
 import enums.Status;
 import enums.Type;
-
 import java.util.Scanner;
+import utility.Utility;
 
 public class Business {
 
+    private final Scanner sc = new Scanner(System.in);
     private UndoRedoManager changesHistorial;
     private Queue<Ticket> ticketQueue;
     private FileManager fileManager;
     private Queue<Ticket> attendedTickets = new LinkedListQueue<>();
-
+    private int nextTicketId;
+    private Ticket currentTicket;
 
     public Business() {
         this.ticketQueue = new PrioritizedTicketQueue();
         this.changesHistorial = new UndoRedoManager();
         this.fileManager = new FileManager();
+        this.nextTicketId = loadLastId();
     }
 
     public void addToQueue(Ticket ticket) {
@@ -25,17 +28,39 @@ public class Business {
     }
 
     public Ticket processTicket() {
-        Ticket currentTicket = ticketQueue.dequeue();
+        if (currentTicket != null) {
+            System.out.println("Ya hay un ticket en atención. Finalícelo antes de continuar.");
+            return null;
+        }
 
-        if (!validateExistence(currentTicket)) {
+        Ticket ticket = ticketQueue.dequeue();
+        this.currentTicket = ticket;
+        if (!validateExistence()) {
             return null;
         }
 
         changesHistorial = new UndoRedoManager();
-        registerChange(new Ticket(currentTicket));
-        currentTicket.setStatus(Status.EN_ATENCION);
+        registerChange(new Ticket(ticket));
+        ticket.setStatus(Status.EN_ATENCION);
+        currentTicket = ticket;
 
         return currentTicket;
+    }
+
+    public void finalizeCurrentTicket() {
+        if (currentTicket == null) {
+            System.out.println("No hay ticket en atención.");
+            return;
+        }
+
+        if (currentTicket.getStatus() == Status.COMPLETADO) {
+            System.out.println("Este ticket ya fue finalizado.");
+            return;
+        }
+
+        currentTicket.setStatus(Status.COMPLETADO);
+        addAttendedTicket(currentTicket);
+        currentTicket = null;
     }
 
     public void registerChange(Ticket ticket) {
@@ -67,14 +92,14 @@ public class Business {
         System.out.println(ticketQueue.toString());
     }
 
-    public void addCommentToCurrentTicket(Ticket ticket, String commentDescription) throws IllegalArgumentException {
-        if (ticket == null) {
+    public void addCommentToCurrentTicket(String commentDescription) throws IllegalArgumentException {
+        if (currentTicket == null) {
             throw new IllegalArgumentException("No hay ningun ticket en atencion.");
         }
 
-        this.registerChange(ticket);
+        this.registerChange(currentTicket);
         try {
-            Person person = ticket.getPerson();
+            Person person = currentTicket.getPerson();
             CommentsList list = person.getComments();
             list.addComment(commentDescription);
             System.out.println("Comentario anadido.");
@@ -84,15 +109,15 @@ public class Business {
         }
     }
 
-    public void deleteCommentFromCurrentTicket(Ticket ticket, int position) {
-        if (ticket == null) {
+    public void deleteCommentFromCurrentTicket(int position) {
+        if (currentTicket == null) {
             System.out.println("No hay ningun ticket en atencion.");
             return;
         }
-        this.registerChange(ticket);
+        this.registerChange(currentTicket);
 
         try {
-            Person person = ticket.getPerson();
+            Person person = currentTicket.getPerson();
             CommentsList list = person.getComments();
             boolean success = list.deleteCommentByPosition(position);
             if (!success) {
@@ -105,15 +130,15 @@ public class Business {
         }
     }
 
-    public void updateCommentOnCurrentTicket(int position, String newDesc, Ticket ticket) {
-        if (ticket == null) {
+    public void updateCommentOnCurrentTicket(int position, String newDesc) {
+        if (currentTicket == null) {
             System.out.println("No hay ningun ticket en atencion.");
             return;
         }
 
-        this.registerChange(ticket);
+        this.registerChange(currentTicket);
         try {
-            Person person = ticket.getPerson();
+            Person person = currentTicket.getPerson();
             CommentsList list = person.getComments();
             boolean success = list.updateCommentByPosition(position, newDesc);
             if (!success) {
@@ -126,9 +151,9 @@ public class Business {
         }
     }
 
-    public void printCommentsOfCurrentTicket(Ticket ticket) {
-        if (ticket != null) {
-            Person person = ticket.getPerson();
+    public void printCommentsOfCurrentTicket() {
+        if (currentTicket != null) {
+            Person person = currentTicket.getPerson();
             CommentsList comments = person.getComments();
             System.out.println("Comentarios para: " + person.getName() + " " + person.getLastName());
             System.out.println("  -> " + comments.toString());
@@ -137,20 +162,7 @@ public class Business {
         }
     }
 
-    public boolean validateInput(String name, String lastname) {
-        if (name.trim().isEmpty() || lastname.trim().isEmpty()) {
-            System.out.println("No se pudo crear el ticket, datos no validos.");
-            return false;
-        }
-
-        if (!name.matches("[a-zA-Z]+") || !lastname.matches("[a-zA-Z]+")) {
-            System.out.println("El nombre y apellido solo deben contener letras.");
-            return false;
-        }
-        return true;
-    }
-
-    public boolean validateExistence(Ticket currentTicket) {
+    public boolean validateExistence() {
         if (currentTicket == null) {
             System.out.println("No hay ticket.");
             return false;
@@ -159,87 +171,23 @@ public class Business {
     }
 
     public void createTicket() {
-        Scanner sc = new Scanner(System.in);
-
         System.out.println("\n=== CREAR NUEVO TICKET ===");
 
-        Person person = requestPersonData(sc);
-        if (person == null) return;
+        Person person = Utility.requestPersonData(sc);
+        if (person == null) {
+            return;
+        }
 
-        boolean priority = validatePrio(sc);
-        Type type = selectType(sc);
+        boolean priority = Utility.validatePrio(sc);
+        Type type = Utility.selectType(sc);
 
-        Ticket newTicket = new Ticket(person, type, Status.EN_COLA, priority);
+        Ticket newTicket = new Ticket(generateNextTicketId(), person, type, Status.EN_COLA, priority);
+
+        saveLastId();
+        nextTicketId++;
         addToQueue(newTicket);
 
         System.out.println("\nTicket agregado correctamente:\n" + newTicket);
-    }
-
-    private Person requestPersonData(Scanner sc) {
-        System.out.print("Nombre: ");
-        String name = sc.nextLine().trim();
-        System.out.print("Apellido: ");
-        String lastName = sc.nextLine().trim();
-
-        if (!validateInput(name, lastName)) {
-            return null;
-        }
-
-        return new Person(name, lastName);
-    }
-
-    private boolean validatePrio(Scanner sc) {
-        boolean priority = false;
-        boolean valid = false;
-
-        while (!valid) {
-            System.out.print("Es prioridad? (s/n): ");
-            String answer = sc.nextLine().trim().toLowerCase();
-
-            switch (answer) {
-                case "s":
-                    priority = true;
-                    valid = true;
-                    break;
-                case "n":
-                    valid = true;
-                    break;
-                default:
-                    System.out.println("Ingrese un parametro valido (s/n).");
-                    break;
-            }
-        }
-
-        return priority;
-    }
-
-    private Type selectType(Scanner sc) {
-        Type type = null;
-
-        while (type == null) {
-            System.out.println("\nSeleccione el tipo de tramite:");
-            System.out.println("1. MATRICULA");
-            System.out.println("2. HOMOLOGACION");
-            System.out.println("3. CONTANCIA_CERTIFICADOS");
-            System.out.print("Opcion: ");
-            String option = sc.nextLine().trim();
-
-            switch (option) {
-                case "1":
-                    type = Type.MATRICULA;
-                    break;
-                case "2":
-                    type = Type.HOMOLOGACION;
-                    break;
-                case "3":
-                    type = Type.CONTANCIA_CERTIFICADOS;
-                    break;
-                default:
-                    System.out.println("Opcion invalida. Intente nuevamente.");
-                    break;
-            }
-        }
-        return type;
     }
 
     public void printTicketHistory() {
@@ -248,43 +196,42 @@ public class Business {
             return;
         }
 
-        fileManager.exportToCSV(attendedTickets);
+        fileManager.exportFinalizedTicketsWithComments(attendedTickets);
     }
 
-    public void handleDeleteComment(Ticket ticket, String input) {
-        if (!validateExistence(ticket)) return;
+    public void handleDeleteComment(String input) {
+        if (!validateExistence()) {
+            return;
+        }
 
-        if (ticket.getPerson().getComments().isEmpty()) {
+        if (currentTicket.getPerson().getComments().isEmpty()) {
             System.out.println("No hay comentarios para eliminar.");
             return;
         }
 
         try {
-            int posDel = Integer.parseInt(input);
-            deleteCommentFromCurrentTicket(ticket, posDel);
+            int posDel = Utility.requestValidInteger(sc, input);
+            deleteCommentFromCurrentTicket(posDel);
         } catch (NumberFormatException e) {
             System.out.println("Entrada no valida. Debe ingresar un numero.");
         }
     }
 
     public void handleUpdateComment(Ticket ticket, Scanner sc) {
-        if (!validateExistence(ticket)) return;
+        if (!validateExistence()) {
+            return;
+        }
 
         if (ticket.getPerson().getComments().isEmpty()) {
             System.out.println("No hay comentarios para actualizar.");
             return;
         }
 
-        printCommentsOfCurrentTicket(ticket);
-        System.out.print("Numero de comentario a actualizar: ");
-        try {
-            int pos = Integer.parseInt(sc.nextLine());
-            System.out.print("Nueva descripcion: ");
-            String newDesc = sc.nextLine();
-            updateCommentOnCurrentTicket(pos, newDesc, ticket);
-        } catch (NumberFormatException e) {
-            System.out.println("Entrada no valida. Debe ingresar un numero.");
-        }
+        printCommentsOfCurrentTicket();
+
+        int pos = Utility.requestValidInteger(sc, "Número de comentario a actualizar: ");
+        String newDesc = Utility.requestNonEmptyString(sc, "Nueva descripción: ");
+        updateCommentOnCurrentTicket(pos, newDesc);
     }
 
     public void addAttendedTicket(Ticket ticket) {
@@ -292,6 +239,56 @@ public class Business {
             attendedTickets.enqueue(new Ticket(ticket));
             System.out.println("Ticket agregado al historial de atendidos.");
         }
+    }
+
+    public void exportFinalizedTickets() {
+        if (attendedTickets == null || attendedTickets.isEmpty()) {
+            System.out.println("No hay tickets finalizados para exportar.");
+            return;
+        }
+        fileManager.exportFinalizedTicketsWithComments(attendedTickets);
+    }
+
+    public void returnToQueueIfPendingDocuments() {
+        if (currentTicket != null && currentTicket.getStatus() == Status.PENDIENTE_DOCS) {
+            addToQueue(currentTicket);
+            currentTicket = null;
+            System.out.println("Ticket devuelto a la cola por estado PENDIENTE_DOCUMENTOS.");
+        }
+    }
+
+    private int loadLastId() {
+        return fileManager.loadLastId();
+    }
+
+    private void saveLastId() {
+        fileManager.saveLastId(nextTicketId);
+    }
+
+    public void savePendingQueue() {
+        if (ticketQueue.isEmpty()) {
+            System.out.println("No hay tickets pendientes para exportar.");
+            return;
+        }
+        fileManager.exportPendingTickets(ticketQueue);
+    }
+
+    private int generateNextTicketId() {
+        int id = nextTicketId;
+        saveLastId();
+        nextTicketId++;
+        return id;
+    }
+
+    public void loadPendingTickets() {
+        Queue<Ticket> imported = fileManager.importPendingTickets();
+        while (!imported.isEmpty()) {
+            ticketQueue.enqueue(imported.dequeue());
+        }
+    }
+
+    public void showFinalizedHistory() {
+        fileManager.printFinalizedTickets(attendedTickets);
     }
 
 }

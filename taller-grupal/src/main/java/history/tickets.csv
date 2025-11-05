@@ -1,2 +1,9 @@
-Nombre;Apellido;Tipo;Estado;Prioridad
-karla;gonzales;MATRICULA;COMPLETADO;No
+ID;Nombre;Apellido;Tipo;Estado;Prioridad
+1;miguel;armas;MATRICULA;COMPLETADO;No
+Comentarios:
+[Comentarios:
+   1. [2025-11-05: Todo bien]
+   2. [2025-11-05: No son necesarias validaciones]
+   3. [2025-11-05: Todo en orden]
+]
+--------------------------------------

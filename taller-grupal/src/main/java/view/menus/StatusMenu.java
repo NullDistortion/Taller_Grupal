@@ -4,6 +4,7 @@ import java.util.Scanner;
 import business.Business;
 import domain.Ticket;
 import enums.Status;
+import utility.Utility;
 import view.Menu;
 
 public class StatusMenu implements Menu {
@@ -17,20 +18,19 @@ public class StatusMenu implements Menu {
         System.out.println("4. PENDIENTE_DOCS");
         System.out.println("5. COMPLETADO");
         System.out.println("6. Regresar");
-        System.out.print("Seleccione una opcion: ");
     }
 
     @Override
     public Ticket handleInput(Business bs, Ticket currentTicket) {
 
-        if (!bs.validateExistence(currentTicket)) {
+        if (!bs.validateExistence()) {
             return currentTicket;
         }
 
         Scanner sc = new Scanner(System.in);
         System.out.println("\nEstado actual: " + currentTicket.getStatus());
         showMenu();
-        String option = sc.nextLine().trim();
+         String option = Utility.requestNonEmptyString(sc,"Seleccione una opcion: " );
 
         switch (option) {
             case "1":
