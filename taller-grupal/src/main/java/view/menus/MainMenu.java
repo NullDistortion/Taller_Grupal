@@ -17,7 +17,8 @@ public class MainMenu implements Menu {
         System.out.println("3. Crear Nuevo Ticket");
         System.out.println("4. Ver Historial de Tickets Finalizados");
         System.out.println("5. Volver a Ticket Actual");
-        System.out.println("6. Guardar y Salir");
+        System.out.println("6. TOP-k Report");
+        System.out.println("7. Guardar y Salir");
     }
 
     @Override
@@ -63,8 +64,10 @@ public class MainMenu implements Menu {
                     currentTicket = new TicketsMenu().handleInput(bs, currentTicket);
                 }
                 break;
-
-            case "6": // GUARDAR Y SALIR
+            case "6":
+                currentTicket = new TopKMenu().handleInput(bs, currentTicket);
+                break;
+            case "7": // GUARDAR Y SALIR
                 if (currentTicket == null) {
                     System.out.println("\n\n");
                     System.out.println("Guardando tickets pendientes en cola...");

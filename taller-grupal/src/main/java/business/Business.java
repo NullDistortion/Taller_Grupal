@@ -3,6 +3,9 @@ package business;
 import domain.*;
 import enums.Status;
 import enums.Type;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 import utility.Utility;
 
@@ -332,6 +335,10 @@ public class Business {
         System.out.println("Tickets finalizados cargados.");
     }
 
+    public Queue<Ticket> finalizedTicketsFromJSON() {
+        return fileManager.importFinalizedTicketsFromJSON();
+    }
+
     public void printFinalizedTickets() {
         if (attendedTickets == null || attendedTickets.isEmpty()) {
             System.out.println("No hay tickets finalizados para mostrar.");
@@ -340,4 +347,92 @@ public class Business {
         fileManager.printFinalizedTickets(attendedTickets);
     }
 
+    private List<Ticket> queueToList(Queue<Ticket> queue) {
+        List<Ticket> list = new ArrayList<>();
+        Queue<Ticket> temp = new LinkedListQueue<>(); // Asumo que usas LinkedListQueue
+        Ticket t;
+
+        // Drenar la cola original a la lista y a una cola temporal
+        while (!queue.isEmpty()) {
+            t = queue.dequeue();
+            list.add(t);
+            temp.enqueue(t);
+        }
+
+        // Rellenar la cola original
+        while (!temp.isEmpty()) {
+            queue.enqueue(temp.dequeue());
+        }
+        return list;
+    }
+
+    /**
+     * Obtiene una lista de tickets ordenada por ID (ascendente).
+     */
+    public List<Ticket> getTopKById(Queue<Ticket> queue, int k) {
+        List<Ticket> list = queueToList(queue);
+
+        // Ordenar la lista usando un Comparator para el ID del ticket
+        // Asumo que tu clase Ticket tiene el método getId()
+        list.sort(Comparator.comparingInt(Ticket::getId));
+
+        // Devolver solo los primeros 'k' elementos (o menos si la lista es más corta)
+        return list.subList(0, Math.min(k, list.size()));
+    }
+
+    /**
+     * Obtiene una lista de tickets ordenada por N° de Comentarios
+     * (descendente).
+     */
+    public List<Ticket> getTopKByComments(Queue<Ticket> queue, int k) {
+        List<Ticket> list = queueToList(queue);
+
+        list.sort(Comparator.comparingInt(
+                (Ticket t) -> t.getPerson().getComments().size()
+        ).reversed()); // .reversed() para orden descendente (de más a menos)
+
+        // Devolver solo los primeros 'k' elementos
+        return list.subList(0, Math.min(k, list.size()));
+    }
+
+    public void printIdReport(List<Ticket> tickets, int k) {
+        System.out.println("\n--- TOP " + k + " TICKETS POR ID (Ascendente) ---");
+        if (tickets.isEmpty()) {
+            System.out.println("No hay resultados.");
+            return;
+        }
+
+        // Formato: printf [ID] | [Nombre] | [Tipo]
+        System.out.println("-------------------------------------------------");
+        for (Ticket t : tickets) {
+            System.out.printf("ID: %-5d | Nombre: %-25s | Tipo: %s\n",
+                    t.getId(),
+                    t.getPerson().getName() + " " + t.getPerson().getLastName(),
+                    t.getType()
+            );
+        }
+        System.out.println("-------------------------------------------------");
+    }
+
+    /**
+     * Imprime el reporte de Top-K por N° de Comentarios.
+     */
+    public void printCommentReport(List<Ticket> tickets, int k) {
+        System.out.println("\n--- TOP " + k + " TICKETS POR N DE COMENTARIOS (Descendente) ---");
+        if (tickets.isEmpty()) {
+            System.out.println("No hay resultados.");
+            return;
+        }
+
+        // Formato: printf [N° Comentarios] | [ID] | [Nombre]
+        System.out.println("-------------------------------------------------");
+        for (Ticket t : tickets) {
+            System.out.printf("Comentarios: %-3d | ID: %-5d | Nombre: %s\n",
+                    t.getPerson().getComments().size(), // Asumo getSize()
+                    t.getId(),
+                    t.getPerson().getName() + " " + t.getPerson().getLastName()
+            );
+        }
+        System.out.println("-------------------------------------------------");
+    }
 }

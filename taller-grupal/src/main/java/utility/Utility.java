@@ -31,7 +31,7 @@ public class Utility {
 
     public static Boolean validatePrio(Scanner sc) { // ¡Cambiado a Boolean!
         while (true) {
-            System.out.print("¿Es prioridad? (s/n) (o 'q' para cancelar): ");
+            System.out.print("Es prioridad? (s/n) (o 'q' para cancelar): ");
             String answer = sc.nextLine().trim().toLowerCase();
 
             switch (answer) {
@@ -103,12 +103,12 @@ public class Utility {
             try {
                 int number = Integer.parseInt(input);
                 if (number <= 0) {
-                    System.out.println("Debe ingresar un número mayor que cero.");
+                    System.out.println("Debe ingresar un numero mayor que cero.");
                 } else {
                     return number; // Éxito
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Entrada no válida. Debe ingresar un número entero.");
+                System.out.println("Entrada no valida. Debe ingresar un numero entero.");
             }
         }
     }
@@ -120,7 +120,7 @@ public class Utility {
             input = sc.nextLine().trim();
             
             if (input.isEmpty()) {
-                System.out.println("La descripción no puede estar vacía.");
+                System.out.println("La descripcion no puede estar vacia.");
             } else {
                 return input; // Éxito
             }
@@ -129,7 +129,7 @@ public class Utility {
 
     public static boolean validateInput(String name, String lastname) {
         if (!isValidSingleWord(name) || !isValidSingleWord(lastname)) {
-            System.out.println("Nombre y apellido deben contener solo letras, sin espacios ni estar vacíos.");
+            System.out.println("Nombre y apellido deben contener solo letras, sin espacios ni estar vacios.");
             return false;
         }
         return true;
