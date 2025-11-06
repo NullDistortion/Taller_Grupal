@@ -1,86 +1,92 @@
-# **Sistema Gestor de Tickets**
+# **Sistema de Gestión de Tickets**
 
-*1. Decisiones de Diseño* 
+Este es un sistema de gestión de tickets de soporte desarrollado en Java, enfocado en la atención y seguimiento de trámites. Es una aplicación de consola que permite crear, atender, y gestionar el ciclo de vida de los tickets, con persistencia de datos y funcionalidad de Deshacer/Rehacer.
 
-Luego de un análisis respecto al problema planteado, el diseño del proyecto se centró en la separación de responsabilidades (clases principales Comments, Person, Ticket y Enum`s para Status y Type) y en la eficiencia de las estructuras de datos. Una decisión clave fue el desarrollo de ChangesStack (Historial), que utiliza una estructura Pila/Cola limitada para actuar como Pila (LIFO) para las operaciones de deshacer/rehacer y simular una Cola (FIFO) para eliminar el elemento más antiguo al alcanzar el límite de historial. Para la base de estas estructuras (Node y DoubleNode), se utilizó Programación Genérica(<T>) para evitar la redundancia de código y garantizar la seguridad de tipos. 
+# ****Características Principales****
 
+  Gestión de Colas: Utiliza una cola priorizada para atender primero los tickets marcados como "prioridad".
 
-*2. Catálogo de Estados*
+  Gestión de Estados: Los tickets transitan por diferentes estados (En Cola, En Atención, Pendiente Documentos, Completado).
 
-El Catálogo de Estados del ticket, definido en el Enum Status, permite que los tickets transiten de forma legible por los estados: EN_COLA (esperando) EN_ATENCION (asignado) EN_PROCESO (trabajando) PENDIENTE_DOCS (pausa) COMPLETADO (solucionado).
+  Sistema Undo/Redo: Permite deshacer y rehacer cambios de estado o comentarios en el ticket que se está atendiendo.
 
+  Gestión de Comentarios: Se pueden añadir, modificar o eliminar comentarios en cada ticket.
 
-*3. Casos Bordes*
+# **Persistencia de Datos:**
 
-Finalmente, el sistema maneja los Casos Borde validando rigurosamente la entrada por consola, restringiendo el uso de valores null en atributos críticos y previniendo fallos al manejar explícitamente las condiciones de pilas y colas vacías en las estructuras de datos del negocio.
+  Guarda los tickets aún en cola en un archivo .csv al salir, para importarlos en la próxima sesión.
 
+  Almacena un historial permanente de tickets "Completados" en un archivo .json.
 
-*4. Guía de ejecución*
+  Mantiene un contador del último ID de ticket en un .txt para asegurar IDs únicos entre sesiones.
 
-Al momento de ejecutar el programa se mostrará en consola el menú de las acciones que se pueden realizar.
+# **Requisitos Previos**
 
-<img width="889" height="224" alt="{A26B1737-D037-4989-B1E8-BA5128168F4C}" src="https://github.com/user-attachments/assets/38e3ee56-d24b-451a-a83c-80fb7712be6b" />
+ - Java JDK 23 o superior.
 
+ - Apache Maven (para gestionar las dependencias).
 
- El usuario debe ingresar el numero de la acción que desea realizar. 
- 
- La opción 0 es para generar de manera automática la cantidad de tickets del usuario
- 
+# **Instalación y Dependencias**
 
- <img width="860" height="296" alt="{70AEA02B-5FB8-4C95-B211-0778C8C72835}" src="https://github.com/user-attachments/assets/ce20c07b-8456-49ad-a26a-571e45ff6407" />
+Este proyecto utiliza dependencias externas (como json-simple) para la gestión de archivos JSON.
 
- 
- 
+Clona o descarga este repositorio en tu máquina local.
 
-En la opción de atención de tickets, se abre un submenú 1 que muestra las acciones para realizar la atención de tickets, las cuales son:
+Revisa si las dependencias requeridas están instaladas.
 
+En caso de no estar instaladas, abre una terminal en la carpeta raíz del proyecto y ejecuta la siguiente línea:
 
-<img width="824" height="311" alt="{B09780D9-ACF6-4D72-8ECE-E40903617641}" src="https://github.com/user-attachments/assets/c060191b-2768-47c2-bda8-4fc3884e3ab6" />
+Bash:
 
-La opción 0, muestra el ticket actual con sus valores
- 
-En caso de que el usuario, seleccione la opción 1 "Opciones de Comentarios", se muestra un submenú 2
+mvn install
 
-<img width="886" height="270" alt="{B508B5E1-CE4D-4DFA-9C28-383EFE30A368}" src="https://github.com/user-attachments/assets/cb518f54-bc05-42e7-a4d9-3fb8ae2da406" />
+Esto leerá el archivo pom.xml y descargará los .jar necesarios para el proyecto (como la librería JSON) en tu repositorio local de Maven.
 
+# **Estructura de Archivos de Datos**
 
-En caso de que el usuario, seleccione la opción 2 "Cambiar Estados", se muestra un submenú 3
+Para que la persistencia de datos funcione correctamente, el programa espera encontrar (o creará) una carpeta específica para almacenar los archivos de historial.
 
-<img width="889" height="347" alt="image" src="https://github.com/user-attachments/assets/2efa9341-4588-40bb-87f4-231499beb277" />
+Asegúrate de que tu proyecto contenga la siguiente ruta: src/main/java/history.
 
- En caso de seleccionar la opcion 3 de atencion de ticket "Revertir Cambios" regresa el actual al estado previo 
- 
- En caso de seleccionar la opcion 4 de atencion de ticket "Rehacer Cambios" revierte el ultimo cambio previamente revertido
- 
- En caso de seleccionar la opcion 5 de atencion de ticket "Finalizar Atencion de Ticket actual" finaliza la atencion del ticket y lo guarda en el historial
+Dentro de esta carpeta se gestionarán los siguientes archivos:
 
+tickets_pendientes.csv: Almacena los tickets que quedaron "En Cola" o "Pendiente Docs" al cerrar la aplicación. Se leen al iniciar.
 
-4.5 La opción 2 muestra los tickets que se encuentran disponibles 
+tickets_finalizados.json: Guarda un historial permanente de todos los tickets que han sido marcados como "Completados".
 
-<img width="896" height="353" alt="image" src="https://github.com/user-attachments/assets/20c5213f-aded-4546-b6c9-2c167f8a77cf" />
+last_id.txt: Un simple archivo de texto que guarda el último ID numérico utilizado, para que los nuevos tickets continúen la secuencia.
 
+# **Cómo Usar (Guía Rápida)**
 
-4.6 La opción 3 genera los tickets de manera manual, pidiendo como parametros: nombre, apellido, numero de carnet identificativo, número telefónico y el tipo de trasnsacción
+Una vez instaladas las dependencias, compila y ejecuta la clase principal: RunApp.java.
 
-<img width="882" height="461" alt="image" src="https://github.com/user-attachments/assets/fcdad13f-5459-435c-a969-eadcf6be11a4" />
+Se desplegará el Menú Principal en la consola.
 
+# **Flujo Básico de Uso**
 
-4.7 La opción 4 imprime el historial de los tickets Atendidos Junto a su ultimo estado.
+Crear Tickets: Usa la Opción 2 ("Crear Nuevo Ticket") para añadir nuevos tickets a la cola. El sistema te pedirá los datos del cliente, el tipo de trámite y si es prioritario.
 
-<img width="1385" height="345" alt="image" src="https://github.com/user-attachments/assets/73b37f66-b29d-41c5-8684-7cdadbf37bf9" />
+Atender Tickets: Selecciona la Opción 1 ("Atender Siguiente Ticket"). El sistema tomará el ticket correspondiente de la cola (dando prioridad a los prioritarios) y te llevará al Menú de Ticket.
 
+Nota: No podrás atender un nuevo ticket hasta que finalices (marques como "Completado" o "Pendiente Docs") el que estás atendiendo.
 
-4.8 Finalmente, con la opción numero 5 se cierra el programa. 
+Gestionar un Ticket: Dentro del Menú de Ticket puedes:
 
-<img width="721" height="203" alt="image" src="https://github.com/user-attachments/assets/cc46473e-b33e-4685-bd23-5c37743156f4" />
+Añadir o modificar comentarios.
 
+Cambiar el estado (ej. "En Proceso", "Pendiente Documentos").
 
+Usar "Deshacer" o "Rehacer" si cometiste un error al cambiar el estado.
 
+Finalizar un Ticket: Para poder tomar un nuevo ticket, debes marcar el actual como:
 
+"Completado": El ticket se guarda en el historial .json y se libera el sistema.
 
+"Pendiente Documentos": El ticket se devuelve a la cola (respetando su prioridad) y se libera el sistema.
 
+Generar un Reporte Top-K: Devuelve la lista de tickets ordenados por id o por cantidad de comentarios.
 
-
+Salir del Programa: Utiliza siempre la Opción 5 ("Guardar y Salir") del Menú Principal. Esto asegura que todos los tickets que quedaron pendientes en la cola se guarden en tickets_pendientes.csv para la próxima vez que ejecutes el programa.
 
 
 
